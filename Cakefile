@@ -3,7 +3,7 @@ fs = require 'fs'
 
 compileJS = (options = {}) ->
   console.log 'Compiling jquery-dependent-selects.coffee...'
-  exec 'coffee --compile jquery-dependent-selects.coffee', copyHeadComment
+  exec 'coffee --compile --bare jquery-dependent-selects.coffee', copyHeadComment
 
 copyHeadComment = ->
   file_contents = fs.readFileSync('jquery-dependent-selects.js').toString('utf-8')
