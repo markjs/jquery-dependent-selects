@@ -5,6 +5,14 @@
     <link rel="stylesheet" href="style.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="jquery-dependent-selects.js"></script>
+    <script>
+      $(function(){
+        $('form').on('submit', function(e){
+          e.preventDefault();
+          alert('Submitted `location` with value of `' + $(e.target).find('select[name=location]').val() + '`');
+        });
+      })
+    </script>
   </head>
   <body>
     
@@ -79,7 +87,7 @@
             });        
           })
         </script>
-        
+
         <script src="https://gist.github.com/4078814.js?file=gistfile1.js"></script>
                 
       </div>            
