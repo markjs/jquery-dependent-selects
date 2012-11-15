@@ -4,6 +4,11 @@ body {
   margin: 0 auto;
 }
 
+.demo {
+  border: 1px dashed #bbb;
+  padding: 1em;
+}
+
 .gist {
   margin: 2em auto;
 }
