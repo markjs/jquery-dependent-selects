@@ -48,6 +48,7 @@ There's some options you can pass into jQuery Dependent Selects when called. The
 
 ```javascript
 $('.example-class').dependentSelects({
-  separator: ' > ' // The separator used to define the nesting in the option field's text
+  separator: ' > ', // The separator used to define the nesting in the option field's text
+  placeholder: '', // The text used for the sub select boxes' placeholder option
 });
 ```
