@@ -15,7 +15,7 @@
 
     createSelectId = ->
       # Yeah, it'll fall down if you have more than 1000 of these on a page.
-      # But if you're doing that, then you should go outside and breath some fresh air.
+      # But if you're doing that, then you should go outside and breathe some fresh air.
       int = parseInt(Math.random()*1000)
       if $("[data-dependent-id='#{int}']").length > 0
         createSelectId()
@@ -86,7 +86,6 @@
         val = $select.val()
         select_id = $select.attr('data-dependent-id')
         clearAllSelectsByParent($select)
-        # $(".dependent-sub[data-dependent-depth=#{$select.data('dependent-depth')+1}]").hide().removeAttr('name')
         
         if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
           $sub.show()
