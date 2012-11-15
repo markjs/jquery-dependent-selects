@@ -28,7 +28,7 @@
     };
     splitOptionName = function($option) {
       var array, i, item, _i, _len;
-      array = $option.text().split(options['separator']).map(function(valuePart) {
+      array = $option.text().split(options.separator).map(function(valuePart) {
         return valuePart.trim();
       });
       i = 0;
@@ -55,13 +55,13 @@
       if (options == null) {
         options = {};
       }
-      name = options['name'];
-      $select = options['select'];
+      name = options.name;
+      $select = options.select;
       select_id = $select.attr('data-dependent-id');
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
-      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options['class']).append("<option>" + options['placeholder'] + "</option>");
+      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options.depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + options.placeholder + "</option>");
       $newSelect.insertAfter($select);
       return $newSelect.hide();
     };
@@ -79,11 +79,11 @@
             name: name[0],
             select: $select,
             depth: depth + 1,
-            placeholder: options['placeholder'],
-            "class": options['class']
+            placeholder: options.placeholder,
+            "class": options["class"]
           });
           $newOption = $option.clone();
-          $newOption.html(splitOptionName($newOption).slice(1).join(options['separator']).trim());
+          $newOption.html(splitOptionName($newOption).slice(1).join(options.separator).trim());
           $subSelect.append($newOption);
           $option.val(val).html(name[0]).attr('data-dependent-name', name[0]);
           if ($options.parent().find("[data-dependent-name='" + name[0] + "']").length > 1) {

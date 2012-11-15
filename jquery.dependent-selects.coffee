@@ -21,7 +21,7 @@
         int
 
     splitOptionName = ($option) ->
-      array = $option.text().split(options['separator']).map((valuePart) -> valuePart.trim())
+      array = $option.text().split(options.separator).map((valuePart) -> valuePart.trim())
       i = 0
       for item in array
         if item == ''
@@ -37,19 +37,19 @@
           $(@).hide()
 
     createNewSelect = (options = {}) ->
-      name = options['name']
-      $select = options['select']
+      name = options.name
+      $select = options.select
       select_id = $select.attr('data-dependent-id')
 
       if ($currentSelect = $("select[data-dependent-parent='#{name}'][data-dependent-id='#{select_id}']")).length > 0
         return $currentSelect
 
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name)
-                   .attr('data-dependent-depth', options['depth'])
+                   .attr('data-dependent-depth', options.depth)
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
-                   .addClass(options['class'])
-                   .append("<option>#{options['placeholder']}</option>")
+                   .addClass(options.class)
+                   .append("<option>#{options.placeholder}</option>")
       $newSelect.insertAfter($select)
       $newSelect.hide()
 
@@ -63,10 +63,10 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options['placeholder'], class: options['class'] })
+          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options.placeholder, class: options.class })
           # Copy option into sub select
           $newOption = $option.clone()
-          $newOption.html(splitOptionName($newOption)[1..-1].join(options['separator']).trim())
+          $newOption.html(splitOptionName($newOption)[1..-1].join(options.separator).trim())
           $subSelect.append($newOption)
 
           # Change option to just parent location
