@@ -8,7 +8,8 @@
         options = {};
       }
       options = $.extend({
-        'separator': ' > '
+        'separator': ' > ',
+        'placeholder': ''
       }, options);
       splitOptionName = function($option) {
         var array, i, item, _i, _len;
@@ -44,7 +45,7 @@
         if (($currentSelect = $("select[data-dependent-parent='" + name + "']")).length > 0) {
           return $currentSelect;
         }
-        $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).append('<option/>');
+        $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).append("<option>" + options['placeholder'] + "</option>");
         $newSelect.insertAfter($select);
         return $newSelect.hide();
       };
@@ -61,7 +62,8 @@
             $subSelect = createNewSelect({
               name: name[0],
               select: $select,
-              depth: depth + 1
+              depth: depth + 1,
+              placeholder: options['placeholder']
             });
             $newOption = $option.clone();
             $newOption.html(splitOptionName($newOption).slice(1).join(options['separator']).trim());
