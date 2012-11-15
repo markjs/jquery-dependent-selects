@@ -1,0 +1,13 @@
+body {
+  font-family: sans-serif;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.gist {
+  margin: 2em auto;
+}
+
+.gist-meta {
+  display: none;
+}

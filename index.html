@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>jQuery Dependent Selects</title>
+    <link rel="stylesheet" href="style.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="jquery-dependent-selects.js"></script>
     <script>
@@ -17,18 +18,31 @@
     <h1>jQuery Dependent Selects Demos</h1>
     <p>For info on the plugin itself, check out the <a href="https://github.com/simpleweb/jquery-dependent-selects#readme">README on GitHub</a>.</p>
     
-    <select name="location" class="dependent">
-      <option></option>
-      <option value="238">London > North > Enfield</option>
-      <option value="239">London > North > Barnet</option>
-      <option value="240">London > South > Croydon</option>
-      <option value="241">London > South > Bromley</option>
-      <option value="242">London > South > Sutton</option>
-      <option value="243">Bristol > St Pauls</option>
-      <option value="244">Bristol > Horfield</option>
-      <option value="245">Bristol > Bedminster</option>
-      <option value="246">Bournemouth</option>
-    </select>
-    
+    <section class="demos">
+      
+      <div class="demo">
+        
+        <form>
+          <select name="location" class="dependent">
+            <option></option>
+            <option value="238">London > North > Enfield</option>
+            <option value="239">London > North > Barnet</option>
+            <option value="240">London > South > Croydon</option>
+            <option value="241">London > South > Bromley</option>
+            <option value="242">London > South > Sutton</option>
+            <option value="243">Bristol > St Pauls</option>
+            <option value="244">Bristol > Horfield</option>
+            <option value="245">Bristol > Bedminster</option>
+            <option value="246">Bournemouth</option>
+          </select>
+          <input type="submit">
+        </form>
+        
+        <script src="https://gist.github.com/4078314.js?file=gistfile1.html"></script>
+        
+      </div>
+      
+    </section>
+
   </body>
 </html>
