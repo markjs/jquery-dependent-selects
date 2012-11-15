@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a jQuery plugin to allow multi-level select boxes that degrade gracefully.
+A jQuery plugin to allow multi-level select boxes that degrade gracefully. It only changes the markup (and very slightly at that) so the styling is all down to you.
 
 ## Demo
 
@@ -16,7 +16,7 @@ Ensure you have jQuery included in your page and include the `jquery-dependent-s
 
 ```html
 <script src="path/to/jquery.js"></script>
-<script src="path/to/jquery-dependent-selects.js"></script>
+<script src="path/to/jquery.dependent-selects.js"></script>
 ```
 
 Mark up your selects as you'd like them to work without JavaScript, ensuring their text displays a consistent separator. For example:
@@ -52,7 +52,21 @@ There's some options you can pass into jQuery Dependent Selects when called. The
 
 ```javascript
 $('.example-class').dependentSelects({
-  separator: ' > ', // The separator used to define the nesting in the option field's text
-  placeholder: '', // The text used for the sub select boxes' placeholder option
+  separator: ' > ', // String: The separator used to define the nesting in the option field's text
+  placeholder: '', // String: The text used for the sub select boxes' placeholder option
+  class: false // String: Add an extra class to all sub selects
 });
 ```
+
+## Contributing
+
+The plugin is written in CoffeeScript and a Cakefile is included with `build` and `watch` tasks. If you'd like to contribute, please write CoffeeScript and use the Cake tasks to compile it.
+
+1. Fork project
+2. Checkout to a new branch (named after the feature / change you're making)
+3. Write code (as mentioned above)
+4. Submit pull request
+
+## License
+
+Licenced under MIT. Copyright 2012 Mark J Smith, Simpleweb.
