@@ -4,6 +4,7 @@
     options = $.extend({
       'separator': ' > '
       'placeholder': ''
+      'class': false
     }, options)
 
     createSelectId = ->
@@ -43,6 +44,7 @@
                    .attr('data-dependent-depth', options['depth'])
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
+                   .addClass(options['class'])
                    .append("<option>#{options['placeholder']}</option>")
       $newSelect.insertAfter($select)
       $newSelect.hide()
@@ -57,7 +59,7 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options['placeholder'] })
+          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options['placeholder'], class: options['class'] })
           # Copy option into sub select
           $newOption = $option.clone()
           $newOption.html(splitOptionName($newOption)[1..-1].join(options['separator']).trim())

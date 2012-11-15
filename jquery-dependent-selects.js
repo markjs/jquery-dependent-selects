@@ -8,7 +8,8 @@
     }
     options = $.extend({
       'separator': ' > ',
-      'placeholder': ''
+      'placeholder': '',
+      'class': false
     }, options);
     createSelectId = function() {
       var int;
@@ -54,7 +55,7 @@
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
-      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).append("<option>" + options['placeholder'] + "</option>");
+      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options['class']).append("<option>" + options['placeholder'] + "</option>");
       $newSelect.insertAfter($select);
       return $newSelect.hide();
     };
@@ -72,7 +73,8 @@
             name: name[0],
             select: $select,
             depth: depth + 1,
-            placeholder: options['placeholder']
+            placeholder: options['placeholder'],
+            "class": options['class']
           });
           $newOption = $option.clone();
           $newOption.html(splitOptionName($newOption).slice(1).join(options['separator']).trim());
