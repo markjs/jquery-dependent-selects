@@ -1,6 +1,8 @@
+###
 # jQuery Dependent Selects v1.0.0
 # Copyright 2012 Mark J Smith, Simpleweb
 # Details on http://github.com/simpleweb/jquery-dependent-selects
+###
 
 (($) ->
 
@@ -13,7 +15,7 @@
 
     createSelectId = ->
       # Yeah, it'll fall down if you have more than 1000 of these on a page.
-      # But if you're doing that, then you should go outside and breath some fresh air.
+      # But if you're doing that, then you should go outside and breathe some fresh air.
       int = parseInt(Math.random()*1000)
       if $("[data-dependent-id='#{int}']").length > 0
         createSelectId()
@@ -21,7 +23,7 @@
         int
 
     splitOptionName = ($option) ->
-      array = $option.text().split(options['separator']).map((valuePart) -> valuePart.trim())
+      array = $option.text().split(options.separator).map((valuePart) -> valuePart.trim())
       i = 0
       for item in array
         if item == ''
@@ -37,19 +39,19 @@
           $(@).hide()
 
     createNewSelect = (options = {}) ->
-      name = options['name']
-      $select = options['select']
+      name = options.name
+      $select = options.select
       select_id = $select.attr('data-dependent-id')
 
       if ($currentSelect = $("select[data-dependent-parent='#{name}'][data-dependent-id='#{select_id}']")).length > 0
         return $currentSelect
 
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name)
-                   .attr('data-dependent-depth', options['depth'])
+                   .attr('data-dependent-depth', options.depth)
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
-                   .addClass(options['class'])
-                   .append("<option>#{options['placeholder']}</option>")
+                   .addClass(options.class)
+                   .append("<option>#{options.placeholder}</option>")
       $newSelect.insertAfter($select)
       $newSelect.hide()
 
@@ -63,10 +65,10 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options['placeholder'], class: options['class'] })
+          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options.placeholder, class: options.class })
           # Copy option into sub select
           $newOption = $option.clone()
-          $newOption.html(splitOptionName($newOption)[1..-1].join(options['separator']).trim())
+          $newOption.html(splitOptionName($newOption)[1..-1].join(options.separator).trim())
           $subSelect.append($newOption)
 
           # Change option to just parent location
@@ -84,7 +86,6 @@
         val = $select.val()
         select_id = $select.attr('data-dependent-id')
         clearAllSelectsByParent($select)
-        # $(".dependent-sub[data-dependent-depth=#{$select.data('dependent-depth')+1}]").hide().removeAttr('name')
         
         if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
           $sub.show()
