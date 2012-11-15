@@ -1,13 +1,16 @@
 fs = require 'fs'
 {spawn, exec} = require 'child_process'
 
+js_file_name = 'jquery-dependent-selects.js'
+coffee_file_name = 'jquery-dependent-selects.coffee'
+
 compileJS = (options = {}) ->
-  console.log 'Compiling jquery-dependent-selects.coffee...'
-  exec 'coffee --compile --bare jquery-dependent-selects.coffee', copyHeadComment
+  console.log "Compiling #{coffee_file_name}..."
+  exec "coffee --compile --bare #{coffee_file_name}", copyHeadComment
 
 copyHeadComment = ->
-  file_contents = fs.readFileSync('jquery-dependent-selects.js').toString('utf-8')
-  coffee_file_contents = fs.readFileSync('jquery-dependent-selects.coffee').toString('utf-8')
+  file_contents = fs.readFileSync(js_file_name).toString('utf-8')
+  coffee_file_contents = fs.readFileSync(coffee_file_name).toString('utf-8')
   head_comment = []
   
   for line in coffee_file_contents.split('\n')
@@ -19,12 +22,12 @@ copyHeadComment = ->
   else
     head_comment = ''
 
-  fs.writeFileSync('jquery-dependent-selects.js', head_comment + file_contents)
+  fs.writeFileSync(js_file_name, head_comment + file_contents)
 
 task 'build', 'Build things', ->
   compileJS()
 
 task 'watch', 'Watch things', ->
   compileJS()
-  fs.watch 'jquery-dependent-selects.coffee', ->
+  fs.watch coffee_file_name, ->
     compileJS()
