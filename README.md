@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a jQuery plugin to allow multi-level select boxes that degrade gracefully.
+A jQuery plugin to allow multi-level select boxes that degrade gracefully. It only changes the markup (and very slightly at that) so the styling is all down to you.
 
 ## Demo
 
@@ -56,3 +56,16 @@ $('.example-class').dependentSelects({
   placeholder: '', // The text used for the sub select boxes' placeholder option
 });
 ```
+
+## Contributing
+
+The plugin is written in CoffeeScript and a Cakefile is included with `build` and `watch` tasks. If you'd like to contribute, please write CoffeeScript and use the Cake tasks to compile it.
+
+1. Fork project
+2. Checkout to a new branch (named after the feature / change you're making)
+3. Write code (as mentioned above)
+4. Submit pull request
+
+## Licence
+
+Licenced under MIT. Copyright 2012 Mark J Smith, Simpleweb.
