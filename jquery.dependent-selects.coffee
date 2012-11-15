@@ -1,3 +1,7 @@
+# jQuery Dependent Selects v1.0.0
+# Copyright 2012 Mark J Smith, Simpleweb
+# Details on http://github.com/simpleweb/jquery-dependent-selects
+
 (($) ->
 
   $.fn.dependentSelects = (options = {}) ->
