@@ -8,8 +8,7 @@
         options = {};
       }
       options = $.extend({
-        'separator': ' > ',
-        'form': $(this).closest('form')
+        'separator': ' > '
       }, options);
       splitOptionName = function($option) {
         return _.without($option.text().split(options['separator']).map(function(valuePart) {
@@ -38,7 +37,7 @@
         $newSelect.insertAfter($select);
         return $newSelect.hide();
       };
-      prepareSelect = function($select, $form, depth) {
+      prepareSelect = function($select, depth) {
         var $options, name;
         $select.attr('data-dependent-depth', depth);
         $options = $select.children('option');
@@ -60,7 +59,7 @@
             if ($options.parent().find("[data-dependent-name='" + name[0] + "']").length > 1) {
               $option.remove();
             }
-            return prepareSelect($subSelect, options['form'], depth + 1);
+            return prepareSelect($subSelect, depth + 1);
           }
         });
         name = $select.attr('name');
@@ -82,7 +81,7 @@
         var $select;
         $select = $(this);
         $select.attr('data-dependent-input-name', $select.attr('name'));
-        return prepareSelect($select, options['form'], 0);
+        return prepareSelect($select, 0);
       });
     };
   })(jQuery);

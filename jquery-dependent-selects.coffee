@@ -3,7 +3,6 @@
   $.fn.dependentSelects = (options = {}) ->
     options = $.extend({
       'separator': ' > '
-      'form': $(@).closest('form')
     }, options)
 
     splitOptionName = ($option) ->
@@ -29,7 +28,7 @@
       $newSelect.insertAfter($select)
       $newSelect.hide()
 
-    prepareSelect = ($select, $form, depth) ->
+    prepareSelect = ($select, depth) ->
       $select.attr('data-dependent-depth', depth)
       $options = $select.children('option')
       $options.each ->
@@ -50,7 +49,7 @@
           # Remove option if already one for that parent location
           $option.remove() if $options.parent().find("[data-dependent-name='#{name[0]}']").length > 1
 
-          prepareSelect($subSelect, options['form'], depth + 1)
+          prepareSelect($subSelect, depth + 1)
  
       name = $select.attr('name')
 
@@ -71,6 +70,6 @@
     @each ->
       $select = $(@)
       $select.attr('data-dependent-input-name', $select.attr('name'))
-      prepareSelect $select, options['form'], 0
-
+      prepareSelect $select, 0
+      
 )(jQuery)
