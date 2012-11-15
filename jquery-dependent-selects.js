@@ -3,7 +3,7 @@
 
   (function($) {
     return $.fn.dependentSelects = function(options) {
-      var clearAllSelectsByParent, createNewSelect, prepareSelect, splitOptionName;
+      var clearAllSelectsByParent, createNewSelect, createSelectId, prepareSelect, splitOptionName;
       if (options == null) {
         options = {};
       }
@@ -11,6 +11,15 @@
         'separator': ' > ',
         'placeholder': ''
       }, options);
+      createSelectId = function() {
+        var int;
+        int = parseInt(Math.random() * 1000);
+        if ($("[data-dependent-id='" + int + "'").length > 0) {
+          return createSelectId();
+        } else {
+          return int;
+        }
+      };
       splitOptionName = function($option) {
         var array, i, item, _i, _len;
         array = $option.text().split(options['separator']).map(function(valuePart) {
@@ -28,7 +37,7 @@
         return array;
       };
       clearAllSelectsByParent = function($parent) {
-        return $(".dependent-sub[data-dependent-input-name='" + ($parent.attr('data-dependent-input-name')) + "']").each(function() {
+        return $(".dependent-sub[data-dependent-id='" + ($parent.attr('data-dependent-id')) + "']").each(function() {
           if (parseInt($(this).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))) {
             $(this).find('option:first').attr('selected', 'selected');
             return $(this).hide();
@@ -36,22 +45,23 @@
         });
       };
       createNewSelect = function(options) {
-        var $currentSelect, $newSelect, $select, name;
+        var $currentSelect, $newSelect, $select, name, select_id;
         if (options == null) {
           options = {};
         }
         name = options['name'];
         $select = options['select'];
-        if (($currentSelect = $("select[data-dependent-parent='" + name + "']")).length > 0) {
+        select_id = $select.attr('data-dependent-id');
+        if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
           return $currentSelect;
         }
-        $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).append("<option>" + options['placeholder'] + "</option>");
+        $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options['depth']).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).append("<option>" + options['placeholder'] + "</option>");
         $newSelect.insertAfter($select);
         return $newSelect.hide();
       };
-      prepareSelect = function($select, depth) {
+      prepareSelect = function($select, depth, select_id) {
         var $options, name;
-        $select.attr('data-dependent-depth', depth);
+        $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id);
         $options = $select.children('option');
         $options.each(function() {
           var $newOption, $option, $subSelect, name, val;
@@ -72,7 +82,7 @@
             if ($options.parent().find("[data-dependent-name='" + name[0] + "']").length > 1) {
               $option.remove();
             }
-            return prepareSelect($subSelect, depth + 1);
+            return prepareSelect($subSelect, depth + 1, select_id);
           }
         });
         name = $select.attr('name');
@@ -81,8 +91,9 @@
           $('select[name]').removeAttr('name');
           valName = $select.find(':selected').html();
           val = $select.val();
+          select_id = $select.attr('data-dependent-id');
           clearAllSelectsByParent($select);
-          if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "']")).length > 0) {
+          if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "'][data-dependent-id='" + select_id + "']")).length > 0) {
             $sub.show();
             return $sub.attr('name', $select.attr('data-dependent-input-name'));
           } else {
@@ -94,7 +105,7 @@
         var $select;
         $select = $(this);
         $select.attr('data-dependent-input-name', $select.attr('name'));
-        return prepareSelect($select, 0);
+        return prepareSelect($select, 0, createSelectId());
       });
     };
   })(jQuery);
