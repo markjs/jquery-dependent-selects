@@ -34,7 +34,7 @@ Mark up your selects as you'd like them to work without JavaScript, ensuring the
 
 Initiate the plugin on the selects you would like it to be activated:
 
-*Note: It's best for this be done after the DOM is ready. For more info see [this brief tutorial](http://docs.jquery.com/Tutorials:Introducing_$(document).ready())
+*Note: It's best for this be done after the DOM is ready. For more info see [this brief tutorial](http://bit.ly/TxePc).*
 
 ```javascript
 $('.dependent').dependentSelects();
