@@ -11,20 +11,20 @@
         'separator': ' > '
       }, options);
       splitOptionName = function($option) {
-        var i, item, newArray, oldArray, _i, _len, _results;
-        oldArray = $option.text().split(options['separator']).map(function(valuePart) {
+        var array, i, item, _i, _len;
+        array = $option.text().split(options['separator']).map(function(valuePart) {
           return valuePart.trim();
         });
         i = 0;
-        _results = [];
-        for (_i = 0, _len = oldArray.length; _i < _len; _i++) {
-          item = oldArray[_i];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          item = array[_i];
           if (item === '') {
-            newArray = oldArray.splice(i, 1);
+            array.splice(i, 1);
+            i--;
           }
-          _results.push(i++);
+          i++;
         }
-        return _results;
+        return array;
       };
       clearAllSelectsByParent = function($parent) {
         return $(".dependent-sub[data-dependent-input-name='" + ($parent.attr('data-dependent-input-name')) + "']").each(function() {

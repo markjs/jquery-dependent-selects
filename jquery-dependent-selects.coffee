@@ -6,12 +6,14 @@
     }, options)
 
     splitOptionName = ($option) ->
-      oldArray = $option.text().split(options['separator']).map((valuePart) -> valuePart.trim())
+      array = $option.text().split(options['separator']).map((valuePart) -> valuePart.trim())
       i = 0
-      for item in oldArray
+      for item in array
         if item == ''
-          newArray = oldArray.splice(i, 1)
+          array.splice(i, 1)
+          i--
         i++
+      array
 
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-input-name='#{$parent.attr('data-dependent-input-name')}']").each ->
