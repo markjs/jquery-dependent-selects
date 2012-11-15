@@ -16,7 +16,7 @@ Ensure you have jQuery included in your page and include the `jquery-dependent-s
 
 ```html
 <script src="path/to/jquery.js"></script>
-<script src="path/to/jquery-dependent-selects.js"></script>
+<script src="path/to/jquery.dependent-selects.js"></script>
 ```
 
 Mark up your selects as you'd like them to work without JavaScript, ensuring their text displays a consistent separator. For example:
