@@ -5,17 +5,6 @@
     <link rel="stylesheet" href="style.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="jquery-dependent-selects.js"></script>
-    <script>
-      $(function(){
-        $('.dependent-demo1').dependentSelects();        
-      })
-      $(function(){
-        $('.dependent-demo2').dependentSelects({
-          separator: ' || ',
-          placeholder: '-- Please Select --'
-        });        
-      })
-    </script>
   </head>
   <body>
     
@@ -49,6 +38,13 @@
         </form>
         
         <script src="https://gist.github.com/4078314.js?file=gistfile1.html"></script>
+
+        <script>
+          $(function(){
+            $('.dependent-demo1').dependentSelects();        
+          })
+        </script>
+
         <script src="https://gist.github.com/4078356.js?file=gistfile1.js"></script>
         
       </div>
@@ -74,6 +70,16 @@
         </form>
         
         <script src="https://gist.github.com/4078808.js?file=gistfile1.html"></script>
+
+        <script>
+          $(function(){
+            $('.dependent-demo2').dependentSelects({
+              separator: ' || ',
+              placeholder: '-- Please Select --'
+            });        
+          })
+        </script>
+        
         <script src="https://gist.github.com/4078814.js?file=gistfile1.js"></script>
                 
       </div>            
