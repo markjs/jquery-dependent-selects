@@ -11,9 +11,20 @@
         'separator': ' > '
       }, options);
       splitOptionName = function($option) {
-        return _.without($option.text().split(options['separator']).map(function(valuePart) {
+        var i, item, newArray, oldArray, _i, _len, _results;
+        oldArray = $option.text().split(options['separator']).map(function(valuePart) {
           return valuePart.trim();
-        }), '');
+        });
+        i = 0;
+        _results = [];
+        for (_i = 0, _len = oldArray.length; _i < _len; _i++) {
+          item = oldArray[_i];
+          if (item === '') {
+            newArray = oldArray.splice(i, 1);
+          }
+          _results.push(i++);
+        }
+        return _results;
       };
       clearAllSelectsByParent = function($parent) {
         return $(".dependent-sub[data-dependent-input-name='" + ($parent.attr('data-dependent-input-name')) + "']").each(function() {
