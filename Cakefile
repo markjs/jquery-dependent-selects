@@ -22,3 +22,7 @@ copyHeadComment = ->
 
 task 'build', 'Build things', ->
   compileJS()
+
+task 'watch', 'Watch things', ->
+  fs.watch 'jquery-dependent-selects.coffee', ->
+    compileJS()
