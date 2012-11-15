@@ -2,6 +2,7 @@ fs = require 'fs'
 {spawn, exec} = require 'child_process'
 
 compileJS = (options = {}) ->
+  console.log 'Compiling jquery-dependent-selects.coffee...'
   exec 'coffee --compile jquery-dependent-selects.coffee', copyHeadComment
 
 copyHeadComment = ->
@@ -24,5 +25,6 @@ task 'build', 'Build things', ->
   compileJS()
 
 task 'watch', 'Watch things', ->
+  compileJS()
   fs.watch 'jquery-dependent-selects.coffee', ->
     compileJS()
