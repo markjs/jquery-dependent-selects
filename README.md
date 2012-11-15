@@ -4,6 +4,10 @@
 
 This is a jQuery plugin to allow multi-level select boxes that degrade gracefully.
 
+## Demo
+
+You can check out some demos [over here](http://simpleweb.github.com/jquery-dependent-selects)!
+
 ## Usage
 
 Ensure you have jQuery included in your page and include the `jquery-dependent-selects.js` script by adding something like this to your page's `<head>`:
