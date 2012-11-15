@@ -1,8 +1,8 @@
 fs = require 'fs'
 {spawn, exec} = require 'child_process'
 
-js_file_name = 'jquery-dependent-selects.js'
-coffee_file_name = 'jquery-dependent-selects.coffee'
+js_file_name = 'jquery.dependent-selects.js'
+coffee_file_name = 'jquery.dependent-selects.coffee'
 
 compileJS = (options = {}) ->
   console.log "Compiling #{coffee_file_name}..."
