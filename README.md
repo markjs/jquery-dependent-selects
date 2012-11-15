@@ -41,3 +41,13 @@ $('.dependent').dependentSelects();
 ```
 
 **Viola!** Your select boxes should now be dependently nested.
+
+## Customisation
+
+There's some options you can pass into jQuery Dependent Selects when called. They are listed here showing the defaults:
+
+```javascript
+$('.example-class').dependentSelects({
+  separator: ' > ' // The separator used to define the nesting in the option field's text
+});
+```
