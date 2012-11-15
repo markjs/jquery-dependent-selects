@@ -3,6 +3,7 @@
   $.fn.dependentSelects = (options = {}) ->
     options = $.extend({
       'separator': ' > '
+      'placeholder': ''
     }, options)
 
     splitOptionName = ($option) ->
@@ -31,7 +32,7 @@
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name)
                    .attr('data-dependent-depth', options['depth'])
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
-                   .append('<option/>')
+                   .append("<option>#{options['placeholder']}</option>")
       $newSelect.insertAfter($select)
       $newSelect.hide()
 
@@ -45,7 +46,7 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1 })
+          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options['placeholder'] })
           # Copy option into sub select
           $newOption = $option.clone()
           $newOption.html(splitOptionName($newOption)[1..-1].join(options['separator']).trim())
