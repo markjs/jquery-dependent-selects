@@ -6,11 +6,11 @@ body {
 
 .demo {
   border: 1px dashed #bbb;
-  padding: 1em;
+  padding: 0 1em;
 }
 
 .gist {
-  margin: 2em auto;
+  margin: 1em auto;
 }
 
 .gist-meta {
