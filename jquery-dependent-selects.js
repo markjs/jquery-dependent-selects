@@ -14,7 +14,7 @@
       createSelectId = function() {
         var int;
         int = parseInt(Math.random() * 1000);
-        if ($("[data-dependent-id='" + int + "'").length > 0) {
+        if ($("[data-dependent-id='" + int + "']").length > 0) {
           return createSelectId();
         } else {
           return int;

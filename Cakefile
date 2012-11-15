@@ -11,12 +11,9 @@ copyHeadComment = ->
   
   for line in coffee_file_contents.split('\n')
     if line[0] == "#"
-      # console.log line
       head_comment.push(line)
 
-  console.log head_comment
-
-  fs.writeFileSync('jquery-dependent-selects.js', '/*\n' + head_comment.join('\n') + '\n*/\n'
+  fs.writeFileSync('jquery-dependent-selects.js', '/*\n' + head_comment.join('\n') + '\n*/\n\n'
                    + file_contents.toString())
 
 task 'build', 'Build things', ->
