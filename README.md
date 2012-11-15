@@ -66,6 +66,6 @@ The plugin is written in CoffeeScript and a Cakefile is included with `build` an
 3. Write code (as mentioned above)
 4. Submit pull request
 
-## Licence
+## License
 
 Licenced under MIT. Copyright 2012 Mark J Smith, Simpleweb.
