@@ -7,7 +7,7 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, prepareSelect, selectChange, selectedOption, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
     if (options == null) {
       options = {};
     }
@@ -65,15 +65,12 @@
       return $newSelect.hide();
     };
     selectChange = function($select) {
-      var $sub, select_id, thing, val, valName;
+      var $sub, select_id, val, valName;
       $('select[name]').removeAttr('name');
       valName = $select.find(':selected').html();
       val = $select.val();
       select_id = $select.attr('data-dependent-id');
       clearAllSelectsByParent($select);
-      if ((thing = $select.attr('data-dependent-selected-id'))) {
-        console.log(thing);
-      }
       if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         $sub.show();
         return $sub.attr('name', $select.attr('data-dependent-input-name'));
@@ -87,6 +84,18 @@
       val = $selectedOption.val();
       if (!(val === '' || val === options.placeholder)) {
         return $select.attr('data-dependent-selected-id', val);
+      }
+    };
+    selectPreSelected = function($select) {
+      var $all_options, $selectedOption, $selects, selected_id;
+      if ((selected_id = $select.attr('data-dependent-selected-id'))) {
+        $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
+        $all_options = $selects.find('option');
+        $selectedOption = $selects.find("option[value='" + selected_id + "']");
+        $selectedOption.closest('select').attr('data-dependent-parent');
+        return $selects.filter(function() {
+          return $(this).find('option').each(function() {});
+        });
       }
     };
     prepareSelect = function($select, depth, select_id) {
