@@ -74,20 +74,21 @@
       unless val == '' or val == options.placeholder
         $select.attr('data-dependent-selected-id', val)
 
+    findSelectParent = ($select) ->
+      $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
+      $all_options = $selects.find('option')
+
+      $selects.filter( ->
+        vals = []
+        $(@).find('option').each ->
+          vals.push $(@).html() == $select.attr('data-dependent-parent')
+        $.inArray(true, vals) > -1
+      )
+
     selectPreSelected = ($select) ->
-      console.log 'wat'
       if (selected_id = $select.attr('data-dependent-selected-id'))
-        console.log 'fun'
-        $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
-        $all_options = $selects.find('option')
-        $selectedOption = $selects.find("option[value='#{selected_id}']")
-
-        $parent = $selects.filter( ->
-          $(@).find('option').each ->
-            if @html() == $selectedOption.closest('select').attr('data-dependent-parent')
-        )
-
-        console.log $parent
+        $parent = findSelectParent($select)
+        console.log 'parent', $parent
         
     prepareSelect = ($select, depth, select_id) ->
       selectedOption($select)
@@ -112,6 +113,8 @@
           $option.remove() if $options.parent().find("[data-dependent-name='#{name[0]}']").length > 1
 
           prepareSelect($subSelect, depth + 1, select_id)
+
+      selectPreSelected($select)
 
       name = $select.attr('name')
 

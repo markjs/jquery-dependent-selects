@@ -7,7 +7,7 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
     if (options == null) {
       options = {};
     }
@@ -86,16 +86,24 @@
         return $select.attr('data-dependent-selected-id', val);
       }
     };
-    selectPreSelected = function($select) {
-      var $all_options, $selectedOption, $selects, selected_id;
-      if ((selected_id = $select.attr('data-dependent-selected-id'))) {
-        $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
-        $all_options = $selects.find('option');
-        $selectedOption = $selects.find("option[value='" + selected_id + "']");
-        $selectedOption.closest('select').attr('data-dependent-parent');
-        return $selects.filter(function() {
-          return $(this).find('option').each(function() {});
+    findSelectParent = function($select) {
+      var $all_options, $selects;
+      $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
+      $all_options = $selects.find('option');
+      return $selects.filter(function() {
+        var vals;
+        vals = [];
+        $(this).find('option').each(function() {
+          return vals.push($(this).html() === $select.attr('data-dependent-parent'));
         });
+        return $.inArray(true, vals) > -1;
+      });
+    };
+    selectPreSelected = function($select) {
+      var $parent, selected_id;
+      if ((selected_id = $select.attr('data-dependent-selected-id'))) {
+        $parent = findSelectParent($select);
+        return console.log('parent', $parent);
       }
     };
     prepareSelect = function($select, depth, select_id) {
@@ -126,6 +134,7 @@
           return prepareSelect($subSelect, depth + 1, select_id);
         }
       });
+      selectPreSelected($select);
       name = $select.attr('name');
       selectChange($select);
       return $select.off('change').on('change', function() {
