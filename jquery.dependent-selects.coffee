@@ -1,5 +1,5 @@
 ###
-# jQuery Dependent Selects v1.0.0
+# jQuery Dependent Selects v1.0.1
 # Copyright 2012 Mark J Smith, Simpleweb
 # Details on http://github.com/simpleweb/jquery-dependent-selects
 ###
@@ -55,6 +55,58 @@
       $newSelect.insertAfter($select)
       $newSelect.hide()
 
+    selectChange = ($select) ->
+      $('select[name]').removeAttr('name')
+      valName = $select.find(':selected').html()
+      val = $select.val()
+      select_id = $select.attr('data-dependent-id')
+      clearAllSelectsByParent($select)
+      
+      if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
+        $sub.show()
+        $sub.attr('name', $select.attr('data-dependent-input-name'))
+      else
+        $select.attr('name', $select.attr('data-dependent-input-name'))
+
+    selectedOption = ($select) ->
+      $selectedOption = $select.find('option:selected')
+      val = $selectedOption.val()
+      unless val == '' or val == options.placeholder
+        $select.attr('data-dependent-selected-id', val)
+
+    findSelectParent = ($select) ->
+      $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
+      $all_options = $selects.find('option')
+
+      $selects.filter( ->
+        vals = []
+        $(@).find('option').each ->
+          vals.push $(@).html() == $select.attr('data-dependent-parent')
+        $.inArray(true, vals) > -1
+      )
+
+    selectPreSelected = ($select) ->
+      if (selected_id = $select.attr('data-dependent-selected-id'))
+        $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
+        $all_options = $selects.find('option')
+
+        $selected_option = $all_options.filter("[value='#{selected_id}']")
+        $selected_select = $selected_option.closest('select')
+
+        $current_select = $selected_select
+        current_option_text = $selected_option.html()
+
+        for i in [(parseInt $selected_select.attr('data-dependent-depth'))..0]
+          $current_select.find('option').each ->
+            if $(@).html() == current_option_text
+              $(@).attr('selected', 'selected')
+            else
+              $(@).removeAttr('selected')
+
+          $current_select.show()
+          current_option_text = $current_select.attr('data-dependent-parent')
+          $current_select = findSelectParent($current_select)
+
     prepareSelect = ($select, depth, select_id) ->
       $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id)
       $options = $select.children('option')
@@ -77,26 +129,20 @@
           $option.remove() if $options.parent().find("[data-dependent-name='#{name[0]}']").length > 1
 
           prepareSelect($subSelect, depth + 1, select_id)
- 
+
       name = $select.attr('name')
 
+      selectChange($select)
+
       $select.off('change').on 'change', ->
-        $('select[name]').removeAttr('name')
-        valName = $select.find(':selected').html()
-        val = $select.val()
-        select_id = $select.attr('data-dependent-id')
-        clearAllSelectsByParent($select)
-        
-        if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
-          $sub.show()
-          $sub.attr('name', $select.attr('data-dependent-input-name'))
-        else
-          $select.attr('name', $select.attr('data-dependent-input-name'))
+        selectChange($select)
 
     # Loop through each of the selects the plugin is called on, and set them up!
     @each ->
       $select = $(@)
       $select.attr('data-dependent-input-name', $select.attr('name'))
+      selectedOption($select)
       prepareSelect $select, 0, createSelectId()
+      selectPreSelected($select)
 
 )(jQuery)

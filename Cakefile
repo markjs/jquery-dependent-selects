@@ -6,7 +6,9 @@ coffee_file_name = 'jquery.dependent-selects.coffee'
 
 compileJS = (options = {}) ->
   console.log "Compiling #{coffee_file_name}..."
-  exec "coffee --compile --bare #{coffee_file_name}"
+  exec "coffee --compile --bare #{coffee_file_name}", (err) ->
+    if err?
+      console.log 'Error :', err
 
 task 'build', 'Build things', ->
   compileJS()
