@@ -124,7 +124,7 @@
           $subSelect.append($newOption)
 
           # Change option to just parent location
-          $option.val(val).html(name[0]).attr('data-dependent-name', name[0])
+          $option.val('').html(name[0]).attr('data-dependent-name', name[0])
           # Remove option if already one for that parent location
           $option.remove() if $options.parent().find("[data-dependent-name='#{name[0]}']").length > 1
 

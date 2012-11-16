@@ -144,7 +144,7 @@
           $newOption = $option.clone();
           $newOption.html(splitOptionName($newOption).slice(1).join(options.separator).trim());
           $subSelect.append($newOption);
-          $option.val(val).html(name[0]).attr('data-dependent-name', name[0]);
+          $option.val('').html(name[0]).attr('data-dependent-name', name[0]);
           if ($options.parent().find("[data-dependent-name='" + name[0] + "']").length > 1) {
             $option.remove();
           }
