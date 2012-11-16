@@ -55,7 +55,31 @@
       $newSelect.insertAfter($select)
       $newSelect.hide()
 
+    selectChange = ($select) ->
+      $('select[name]').removeAttr('name')
+      valName = $select.find(':selected').html()
+      val = $select.val()
+      select_id = $select.attr('data-dependent-id')
+      clearAllSelectsByParent($select)
+
+      if (thing = $select.attr('data-dependent-selected-id'))
+        console.log thing
+      
+      if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
+        $sub.show()
+        $sub.attr('name', $select.attr('data-dependent-input-name'))
+      else
+        $select.attr('name', $select.attr('data-dependent-input-name'))
+
+    selectedOption = ($select) ->
+      $selectedOption = $select.find('option:selected')
+      val = $selectedOption.val()
+      unless val == '' or val == options.placeholder
+        $select.attr('data-dependent-selected-id', val)
+
+
     prepareSelect = ($select, depth, select_id) ->
+      selectedOption($select)
       $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id)
       $options = $select.children('option')
       $options.each ->
@@ -80,18 +104,10 @@
  
       name = $select.attr('name')
 
+      selectChange($select)
+
       $select.off('change').on 'change', ->
-        $('select[name]').removeAttr('name')
-        valName = $select.find(':selected').html()
-        val = $select.val()
-        select_id = $select.attr('data-dependent-id')
-        clearAllSelectsByParent($select)
-        
-        if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
-          $sub.show()
-          $sub.attr('name', $select.attr('data-dependent-input-name'))
-        else
-          $select.attr('name', $select.attr('data-dependent-input-name'))
+        selectChange($select)
 
     # Loop through each of the selects the plugin is called on, and set them up!
     @each ->

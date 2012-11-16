@@ -7,7 +7,7 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, prepareSelect, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, prepareSelect, selectChange, selectedOption, splitOptionName;
     if (options == null) {
       options = {};
     }
@@ -64,8 +64,34 @@
       $newSelect.insertAfter($select);
       return $newSelect.hide();
     };
+    selectChange = function($select) {
+      var $sub, select_id, thing, val, valName;
+      $('select[name]').removeAttr('name');
+      valName = $select.find(':selected').html();
+      val = $select.val();
+      select_id = $select.attr('data-dependent-id');
+      clearAllSelectsByParent($select);
+      if ((thing = $select.attr('data-dependent-selected-id'))) {
+        console.log(thing);
+      }
+      if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "'][data-dependent-id='" + select_id + "']")).length > 0) {
+        $sub.show();
+        return $sub.attr('name', $select.attr('data-dependent-input-name'));
+      } else {
+        return $select.attr('name', $select.attr('data-dependent-input-name'));
+      }
+    };
+    selectedOption = function($select) {
+      var $selectedOption, val;
+      $selectedOption = $select.find('option:selected');
+      val = $selectedOption.val();
+      if (!(val === '' || val === options.placeholder)) {
+        return $select.attr('data-dependent-selected-id', val);
+      }
+    };
     prepareSelect = function($select, depth, select_id) {
       var $options, name;
+      selectedOption($select);
       $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id);
       $options = $select.children('option');
       $options.each(function() {
@@ -92,19 +118,9 @@
         }
       });
       name = $select.attr('name');
+      selectChange($select);
       return $select.off('change').on('change', function() {
-        var $sub, val, valName;
-        $('select[name]').removeAttr('name');
-        valName = $select.find(':selected').html();
-        val = $select.val();
-        select_id = $select.attr('data-dependent-id');
-        clearAllSelectsByParent($select);
-        if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "'][data-dependent-id='" + select_id + "']")).length > 0) {
-          $sub.show();
-          return $sub.attr('name', $select.attr('data-dependent-input-name'));
-        } else {
-          return $select.attr('name', $select.attr('data-dependent-input-name'));
-        }
+        return selectChange($select);
       });
     };
     return this.each(function() {
