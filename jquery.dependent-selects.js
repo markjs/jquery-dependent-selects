@@ -100,15 +100,32 @@
       });
     };
     selectPreSelected = function($select) {
-      var $parent, selected_id;
+      var $all_options, $current_select, $selected_option, $selected_select, $selects, current_option_text, i, selected_id, _i, _ref, _results;
       if ((selected_id = $select.attr('data-dependent-selected-id'))) {
-        $parent = findSelectParent($select);
-        return console.log('parent', $parent);
+        $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
+        $all_options = $selects.find('option');
+        $selected_option = $all_options.filter("[value='" + selected_id + "']");
+        $selected_select = $selected_option.closest('select');
+        $current_select = $selected_select;
+        current_option_text = $selected_option.html();
+        _results = [];
+        for (i = _i = _ref = parseInt($selected_select.attr('data-dependent-depth')); _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+          $current_select.find('option').each(function() {
+            if ($(this).html() === current_option_text) {
+              return $(this).attr('selected', 'selected');
+            } else {
+              return $(this).removeAttr('selected');
+            }
+          });
+          $current_select.show();
+          current_option_text = $current_select.attr('data-dependent-parent');
+          _results.push($current_select = findSelectParent($current_select));
+        }
+        return _results;
       }
     };
     prepareSelect = function($select, depth, select_id) {
       var $options, name;
-      selectedOption($select);
       $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id);
       $options = $select.children('option');
       $options.each(function() {
@@ -134,7 +151,6 @@
           return prepareSelect($subSelect, depth + 1, select_id);
         }
       });
-      selectPreSelected($select);
       name = $select.attr('name');
       selectChange($select);
       return $select.off('change').on('change', function() {
@@ -145,7 +161,9 @@
       var $select;
       $select = $(this);
       $select.attr('data-dependent-input-name', $select.attr('name'));
-      return prepareSelect($select, 0, createSelectId());
+      selectedOption($select);
+      prepareSelect($select, 0, createSelectId());
+      return selectPreSelected($select);
     });
   };
 })(jQuery);

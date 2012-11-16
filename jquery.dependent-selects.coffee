@@ -87,11 +87,27 @@
 
     selectPreSelected = ($select) ->
       if (selected_id = $select.attr('data-dependent-selected-id'))
-        $parent = findSelectParent($select)
-        console.log 'parent', $parent
-        
+        $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
+        $all_options = $selects.find('option')
+
+        $selected_option = $all_options.filter("[value='#{selected_id}']")
+        $selected_select = $selected_option.closest('select')
+
+        $current_select = $selected_select
+        current_option_text = $selected_option.html()
+
+        for i in [(parseInt $selected_select.attr('data-dependent-depth'))..0]
+          $current_select.find('option').each ->
+            if $(@).html() == current_option_text
+              $(@).attr('selected', 'selected')
+            else
+              $(@).removeAttr('selected')
+
+          $current_select.show()
+          current_option_text = $current_select.attr('data-dependent-parent')
+          $current_select = findSelectParent($current_select)
+
     prepareSelect = ($select, depth, select_id) ->
-      selectedOption($select)
       $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id)
       $options = $select.children('option')
       $options.each ->
@@ -114,8 +130,6 @@
 
           prepareSelect($subSelect, depth + 1, select_id)
 
-      selectPreSelected($select)
-
       name = $select.attr('name')
 
       selectChange($select)
@@ -127,6 +141,8 @@
     @each ->
       $select = $(@)
       $select.attr('data-dependent-input-name', $select.attr('name'))
+      selectedOption($select)
       prepareSelect $select, 0, createSelectId()
+      selectPreSelected($select)
 
 )(jQuery)
