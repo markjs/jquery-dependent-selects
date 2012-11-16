@@ -94,11 +94,11 @@
 
       <div class="demo">
         
-        <h3>Pre-selected Value</h3>
+        <h3>Pre-selected Value &amp; Placeholder Array</h3>
         
         <form>
           <select name="location" class="dependent-demo3">
-            <option></option>
+            <option>= Select City =</option>
             <option value="238">London > North > Enfield</option>
             <option value="239">London > North > Barnet</option>
             <option value="240" selected="selected">London > South > Croydon</option>
@@ -116,7 +116,9 @@
 
         <script>
           $(function(){
-            $('.dependent-demo3').dependentSelects();        
+            $('.dependent-demo3').dependentSelects({
+              placeholder: ['= Select District =', '= Select Region =']
+            });        
           })
         </script>
 
