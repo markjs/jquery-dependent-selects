@@ -56,7 +56,7 @@
       $newSelect.hide()
 
     selectChange = ($select) ->
-      $('select[name]').removeAttr('name')
+      $("select[data-dependent-id='#{$select.attr('data-dependent-id')}'][name]").removeAttr('name')
       valName = $select.find(':selected').html()
       val = $select.val()
       select_id = $select.attr('data-dependent-id')
@@ -106,6 +106,8 @@
           $current_select.show()
           current_option_text = $current_select.attr('data-dependent-parent')
           $current_select = findSelectParent($current_select)
+
+        $selected_select.trigger('change')
 
     prepareSelect = ($select, depth, select_id) ->
       $select.attr('data-dependent-depth', depth).attr('data-dependent-id', select_id)

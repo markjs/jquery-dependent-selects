@@ -66,7 +66,7 @@
     };
     selectChange = function($select) {
       var $sub, select_id, val, valName;
-      $('select[name]').removeAttr('name');
+      $("select[data-dependent-id='" + ($select.attr('data-dependent-id')) + "'][name]").removeAttr('name');
       valName = $select.find(':selected').html();
       val = $select.val();
       select_id = $select.attr('data-dependent-id');
@@ -100,7 +100,7 @@
       });
     };
     selectPreSelected = function($select) {
-      var $all_options, $current_select, $selected_option, $selected_select, $selects, current_option_text, i, selected_id, _i, _ref, _results;
+      var $all_options, $current_select, $selected_option, $selected_select, $selects, current_option_text, i, selected_id, _i, _ref;
       if ((selected_id = $select.attr('data-dependent-selected-id'))) {
         $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
         $all_options = $selects.find('option');
@@ -108,7 +108,6 @@
         $selected_select = $selected_option.closest('select');
         $current_select = $selected_select;
         current_option_text = $selected_option.html();
-        _results = [];
         for (i = _i = _ref = parseInt($selected_select.attr('data-dependent-depth')); _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
           $current_select.find('option').each(function() {
             if ($(this).html() === current_option_text) {
@@ -119,9 +118,9 @@
           });
           $current_select.show();
           current_option_text = $current_select.attr('data-dependent-parent');
-          _results.push($current_select = findSelectParent($current_select));
+          $current_select = findSelectParent($current_select);
         }
-        return _results;
+        return $selected_select.trigger('change');
       }
     };
     prepareSelect = function($select, depth, select_id) {
