@@ -32,6 +32,17 @@
         i++
       array
 
+    placeholderAtDepth = (depth) ->
+      depth--
+      placeholder = options.placeholder
+      if typeof placeholder == 'object'
+        if placeholder[depth]
+          placeholder[depth]
+        else
+          placeholder[placeholder.length]
+      else
+        placeholder
+
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->
         if parseInt($(@).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))
@@ -51,7 +62,7 @@
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
                    .addClass(options.class)
-                   .append("<option>#{options.placeholder}</option>")
+                   .append("<option>#{placeholderAtDepth(options.depth)}</option>")
       $newSelect.insertAfter($select)
       $newSelect.hide()
 

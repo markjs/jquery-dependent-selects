@@ -7,7 +7,7 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, placeholderAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
     if (options == null) {
       options = {};
     }
@@ -41,6 +41,20 @@
       }
       return array;
     };
+    placeholderAtDepth = function(depth) {
+      var placeholder;
+      depth--;
+      placeholder = options.placeholder;
+      if (typeof placeholder === 'object') {
+        if (placeholder[depth]) {
+          return placeholder[depth];
+        } else {
+          return placeholder[placeholder.length];
+        }
+      } else {
+        return placeholder;
+      }
+    };
     clearAllSelectsByParent = function($parent) {
       return $(".dependent-sub[data-dependent-id='" + ($parent.attr('data-dependent-id')) + "']").each(function() {
         if (parseInt($(this).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))) {
@@ -60,7 +74,7 @@
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
-      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options.depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + options.placeholder + "</option>");
+      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options.depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(options.depth)) + "</option>");
       $newSelect.insertAfter($select);
       return $newSelect.hide();
     };
