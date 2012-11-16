@@ -1,5 +1,9 @@
 # jQuery Dependent Selects Change Log
 
+## Version 1.0.4
+
+- Placeholder option now accepts an array of strings to be used at different levels
+
 ## Version 1.0.3
 
 - Fixes a bug where select name values were getting removed from all selects on the page

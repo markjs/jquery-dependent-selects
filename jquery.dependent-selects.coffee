@@ -1,5 +1,5 @@
 ###
-# jQuery Dependent Selects v1.0.3
+# jQuery Dependent Selects v1.0.4
 # Copyright 2012 Mark J Smith, Simpleweb
 # Details on http://github.com/simpleweb/jquery-dependent-selects
 ###
