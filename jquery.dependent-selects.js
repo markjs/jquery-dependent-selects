@@ -7,14 +7,15 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, placeholderAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, insertLabel, labelAtDepth, placeholderAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
     if (options == null) {
       options = {};
     }
     options = $.extend({
       'separator': ' > ',
       'placeholder': '',
-      'class': false
+      'class': false,
+      'labels': false
     }, options);
     createSelectId = function() {
       var int;
@@ -49,29 +50,86 @@
         if (placeholder[depth]) {
           return placeholder[depth];
         } else {
-          return placeholder[placeholder.length];
+          return placeholder[placeholder.length - 1];
         }
       } else {
         return placeholder;
+      }
+    };
+    labelAtDepth = function(depth, $select) {
+      var labels;
+      depth--;
+      labels = options.labels;
+      if (labels) {
+        if (labels === true) {
+          labels = $select.data('dependent-labels');
+        }
+        if (labels[depth]) {
+          return labels[depth];
+        } else {
+          return labels[labels.length - 1];
+        }
+      } else {
+        return false;
+      }
+    };
+    hideSelect = function($select) {
+      var select_depth, select_id;
+      select_id = $select.attr('data-dependent-id');
+      select_depth = $select.attr('data-dependent-depth');
+      $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
+      return $select.hide();
+    };
+    showSelect = function($select) {
+      var select_depth, select_id;
+      $select.show();
+      select_id = $select.attr('data-dependent-id');
+      select_depth = $select.attr('data-dependent-depth');
+      return $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+    };
+    insertLabel = function($select, $parent) {
+      var $label, label, select_depth, select_id;
+      if (label = labelAtDepth($select.attr('data-dependent-depth'), $select)) {
+        select_id = $select.attr('data-dependent-id');
+        select_depth = $select.attr('data-dependent-depth');
+        $label = $("<label>" + label + "</label>").attr({
+          'data-dependent-id': select_id,
+          'data-dependent-depth': select_depth
+        });
+        if (!($("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").length > 0)) {
+          if ($parent) {
+            return $parent.after($label);
+          } else {
+            return $select.before($label);
+          }
+        }
       }
     };
     clearAllSelectsByParent = function($parent) {
       return $(".dependent-sub[data-dependent-id='" + ($parent.attr('data-dependent-id')) + "']").each(function() {
         if (parseInt($(this).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))) {
           $(this).find('option:first').attr('selected', 'selected');
-          return $(this).hide();
+          return hideSelect($(this));
         }
       });
     };
     createNewSelect = function(name, $select, depth) {
-      var $currentSelect, $newSelect, select_id;
+      var $currentSelect, $labels, $newSelect, select_id;
       select_id = $select.attr('data-dependent-id');
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(depth)) + "</option>");
-      $newSelect.insertAfter($select);
-      return $newSelect.hide();
+      if (options.labels === true) {
+        $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'));
+      }
+      if (($labels = $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + depth + "']")).length > 0) {
+        $newSelect.insertAfter($labels);
+      } else {
+        $newSelect.insertAfter($select);
+      }
+      insertLabel($newSelect, $select);
+      return hideSelect($newSelect);
     };
     selectChange = function($select) {
       var $sub, select_id, val, valName;
@@ -81,7 +139,7 @@
       select_id = $select.attr('data-dependent-id');
       clearAllSelectsByParent($select);
       if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "'][data-dependent-id='" + select_id + "']")).length > 0) {
-        $sub.show();
+        showSelect($sub);
         return $sub.attr('name', $select.attr('data-dependent-input-name'));
       } else {
         return $select.attr('name', $select.attr('data-dependent-input-name'));
@@ -97,7 +155,7 @@
     };
     findSelectParent = function($select) {
       var $all_options, $selects;
-      $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
+      $selects = $("select[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
       $all_options = $selects.find('option');
       return $selects.filter(function() {
         var vals;
@@ -111,7 +169,7 @@
     selectPreSelected = function($select) {
       var $all_options, $current_select, $selected_option, $selected_select, $selects, current_option_text, i, selected_id, _i, _ref;
       if ((selected_id = $select.attr('data-dependent-selected-id'))) {
-        $selects = $("[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
+        $selects = $("select[data-dependent-id='" + ($select.attr('data-dependent-id')) + "']");
         $all_options = $selects.find('option');
         $selected_option = $all_options.filter("[value='" + selected_id + "']");
         $selected_select = $selected_option.closest('select');
@@ -125,7 +183,7 @@
               return $(this).removeAttr('selected');
             }
           });
-          $current_select.show();
+          showSelect($current_select);
           current_option_text = $current_select.attr('data-dependent-parent');
           $current_select = findSelectParent($current_select);
         }
