@@ -41,7 +41,7 @@
         if placeholder[depth]
           placeholder[depth]
         else
-          placeholder[placeholder.length]
+          placeholder[placeholder.length-1]
       else
         placeholder
 
@@ -52,7 +52,7 @@
         if labels[depth]
           labels[depth]
         else
-          labels[labels.length]
+          labels[labels.length-1]
       else
         false
 

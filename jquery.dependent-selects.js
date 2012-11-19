@@ -51,7 +51,7 @@
         if (placeholder[depth]) {
           return placeholder[depth];
         } else {
-          return placeholder[placeholder.length];
+          return placeholder[placeholder.length - 1];
         }
       } else {
         return placeholder;
@@ -65,7 +65,7 @@
         if (labels[depth]) {
           return labels[depth];
         } else {
-          return labels[labels.length];
+          return labels[labels.length - 1];
         }
       } else {
         return false;
