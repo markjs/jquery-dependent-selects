@@ -14,7 +14,9 @@
     options = $.extend({
       'separator': ' > ',
       'placeholder': '',
-      'class': false
+      'class': false,
+      'labels': false,
+      'labelPosition': 'before'
     }, options);
     createSelectId = function() {
       var int;
