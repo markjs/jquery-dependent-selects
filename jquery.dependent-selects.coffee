@@ -12,7 +12,6 @@
       'placeholder': ''
       'class': false
       'labels': false
-      'labelPosition': 'before'
     }, options)
 
     createSelectId = ->

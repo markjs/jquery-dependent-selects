@@ -15,8 +15,7 @@
       'separator': ' > ',
       'placeholder': '',
       'class': false,
-      'labels': false,
-      'labelPosition': 'before'
+      'labels': false
     }, options);
     createSelectId = function() {
       var int;
