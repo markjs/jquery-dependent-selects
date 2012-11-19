@@ -45,6 +45,23 @@
       else
         placeholder
 
+    labelAtDepth = (depth) ->
+      depth--
+      labels = options.labels
+      if labels
+        if labels[depth]
+          labels[depth]
+        else
+          labels[labels.length]
+      else
+        false
+
+    insertLabel = ($select) ->
+      if label = labelAtDepth($select.attr('data-dependent-depth'))
+        $label = $("<label>#{label}</label>")
+        $select.before($label)
+        console.log $label
+
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->
         if parseInt($(@).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))
@@ -64,6 +81,7 @@
                    .addClass(options.class)
                    .append("<option>#{placeholderAtDepth(depth)}</option>")
       $newSelect.insertAfter($select)
+      insertLabel($newSelect)
       $newSelect.hide()
 
     selectChange = ($select) ->

@@ -7,7 +7,7 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, placeholderAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, insertLabel, labelAtDepth, placeholderAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, splitOptionName;
     if (options == null) {
       options = {};
     }
@@ -57,6 +57,28 @@
         return placeholder;
       }
     };
+    labelAtDepth = function(depth) {
+      var labels;
+      depth--;
+      labels = options.labels;
+      if (labels) {
+        if (labels[depth]) {
+          return labels[depth];
+        } else {
+          return labels[labels.length];
+        }
+      } else {
+        return false;
+      }
+    };
+    insertLabel = function($select) {
+      var $label, label;
+      if (label = labelAtDepth($select.attr('data-dependent-depth'))) {
+        $label = $("<label>" + label + "</label>");
+        $select.before($label);
+        return console.log($label);
+      }
+    };
     clearAllSelectsByParent = function($parent) {
       return $(".dependent-sub[data-dependent-id='" + ($parent.attr('data-dependent-id')) + "']").each(function() {
         if (parseInt($(this).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))) {
@@ -73,6 +95,7 @@
       }
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(depth)) + "</option>");
       $newSelect.insertAfter($select);
+      insertLabel($newSelect);
       return $newSelect.hide();
     };
     selectChange = function($select) {
