@@ -64,7 +64,8 @@
           'data-dependent-id': select_id
           'data-dependent-depth': select_depth
         })
-        $select.before($label)
+        unless $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").length > 0
+          $select.before($label)
 
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->

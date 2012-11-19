@@ -80,7 +80,9 @@
           'data-dependent-id': select_id,
           'data-dependent-depth': select_depth
         });
-        return $select.before($label);
+        if (!($("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").length > 0)) {
+          return $select.before($label);
+        }
       }
     };
     clearAllSelectsByParent = function($parent) {
