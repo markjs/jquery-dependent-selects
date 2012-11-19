@@ -57,11 +57,14 @@
         return placeholder;
       }
     };
-    labelAtDepth = function(depth) {
+    labelAtDepth = function(depth, $select) {
       var labels;
       depth--;
       labels = options.labels;
       if (labels) {
+        if (labels === true) {
+          labels = $select.data('dependent-labels');
+        }
         if (labels[depth]) {
           return labels[depth];
         } else {
@@ -87,7 +90,7 @@
     };
     insertLabel = function($select, $parent) {
       var $label, label, select_depth, select_id;
-      if (label = labelAtDepth($select.attr('data-dependent-depth'))) {
+      if (label = labelAtDepth($select.attr('data-dependent-depth'), $select)) {
         select_id = $select.attr('data-dependent-id');
         select_depth = $select.attr('data-dependent-depth');
         $label = $("<label>" + label + "</label>").attr({
@@ -118,6 +121,9 @@
         return $currentSelect;
       }
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(depth)) + "</option>");
+      if (options.labels === true) {
+        $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'));
+      }
       if (($labels = $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + depth + "']")).length > 0) {
         $newSelect.insertAfter($labels);
       } else {

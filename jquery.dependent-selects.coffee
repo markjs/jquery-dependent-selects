@@ -45,10 +45,12 @@
       else
         placeholder
 
-    labelAtDepth = (depth) ->
+    labelAtDepth = (depth, $select) ->
       depth--
       labels = options.labels
       if labels
+        if labels == true
+          labels = $select.data('dependent-labels')
         if labels[depth]
           labels[depth]
         else
@@ -69,7 +71,7 @@
       $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
 
     insertLabel = ($select, $parent) ->
-      if label = labelAtDepth($select.attr('data-dependent-depth'))
+      if label = labelAtDepth($select.attr('data-dependent-depth'), $select)
         select_id = $select.attr('data-dependent-id')
         select_depth = $select.attr('data-dependent-depth')
         $label = $("<label>#{label}</label>").attr({
@@ -100,6 +102,10 @@
                    .attr('data-dependent-id', select_id)
                    .addClass(options.class)
                    .append("<option>#{placeholderAtDepth(depth)}</option>")
+
+      if options.labels == true
+        $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'))
+
       if ($labels = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{depth}']")).length > 0
         $newSelect.insertAfter($labels)
       else
