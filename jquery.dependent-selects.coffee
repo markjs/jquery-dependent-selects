@@ -100,7 +100,11 @@
                    .attr('data-dependent-id', select_id)
                    .addClass(options.class)
                    .append("<option>#{placeholderAtDepth(depth)}</option>")
-      $newSelect.insertAfter($select)
+      if ($labels = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{depth}']")).length > 0
+        $newSelect.insertAfter($labels)
+      else
+        $newSelect.insertAfter($select)
+        
       insertLabel($newSelect, $select)
       hideSelect($newSelect)
 

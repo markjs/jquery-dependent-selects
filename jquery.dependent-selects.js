@@ -112,13 +112,17 @@
       });
     };
     createNewSelect = function(name, $select, depth) {
-      var $currentSelect, $newSelect, select_id;
+      var $currentSelect, $labels, $newSelect, select_id;
       select_id = $select.attr('data-dependent-id');
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(depth)) + "</option>");
-      $newSelect.insertAfter($select);
+      if (($labels = $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + depth + "']")).length > 0) {
+        $newSelect.insertAfter($labels);
+      } else {
+        $newSelect.insertAfter($select);
+      }
       insertLabel($newSelect, $select);
       return hideSelect($newSelect);
     };
