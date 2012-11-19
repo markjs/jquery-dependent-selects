@@ -58,9 +58,11 @@
 
     insertLabel = ($select) ->
       if label = labelAtDepth($select.attr('data-dependent-depth'))
+        select_id = $select.attr('data-dependent-id')
+        select_depth = $select.attr('data-dependent-depth')
         $label = $("<label>#{label}</label>").attr({
-          'data-dependent-id': $select.attr('data-dependent-id')
-          'data-dependent-depth': $select.attr('data-dependent-depth')
+          'data-dependent-id': select_id
+          'data-dependent-depth': select_depth
         })
         $select.before($label)
 
