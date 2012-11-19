@@ -65,18 +65,13 @@
         }
       });
     };
-    createNewSelect = function(options) {
-      var $currentSelect, $newSelect, $select, name, select_id;
-      if (options == null) {
-        options = {};
-      }
-      name = options.name;
-      $select = options.select;
+    createNewSelect = function(name, $select, depth) {
+      var $currentSelect, $newSelect, select_id;
       select_id = $select.attr('data-dependent-id');
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
-      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', options.depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(options.depth)) + "</option>");
+      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(depth)) + "</option>");
       $newSelect.insertAfter($select);
       return $newSelect.hide();
     };
@@ -149,13 +144,7 @@
         name = splitOptionName($option);
         val = $option.val();
         if (name.length > 1) {
-          $subSelect = createNewSelect({
-            name: name[0],
-            select: $select,
-            depth: depth + 1,
-            placeholder: options.placeholder,
-            "class": options["class"]
-          });
+          $subSelect = createNewSelect(name[0], $select, depth + 1);
           $newOption = $option.clone();
           $newOption.html(splitOptionName($newOption).slice(1).join(options.separator).trim());
           $subSelect.append($newOption);
