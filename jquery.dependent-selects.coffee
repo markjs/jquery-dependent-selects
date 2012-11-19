@@ -58,9 +58,11 @@
 
     insertLabel = ($select) ->
       if label = labelAtDepth($select.attr('data-dependent-depth'))
-        $label = $("<label>#{label}</label>")
+        $label = $("<label>#{label}</label>").attr({
+          'data-dependent-id': $select.attr('data-dependent-id')
+          'data-dependent-depth': $select.attr('data-dependent-depth')
+        })
         $select.before($label)
-        console.log $label
 
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->

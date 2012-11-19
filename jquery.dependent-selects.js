@@ -74,9 +74,11 @@
     insertLabel = function($select) {
       var $label, label;
       if (label = labelAtDepth($select.attr('data-dependent-depth'))) {
-        $label = $("<label>" + label + "</label>");
-        $select.before($label);
-        return console.log($label);
+        $label = $("<label>" + label + "</label>").attr({
+          'data-dependent-id': $select.attr('data-dependent-id'),
+          'data-dependent-depth': $select.attr('data-dependent-depth')
+        });
+        return $select.before($label);
       }
     };
     clearAllSelectsByParent = function($parent) {
