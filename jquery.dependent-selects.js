@@ -7,13 +7,14 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, insertLabel, labelAtDepth, placeholderOptionAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, insertLabel, insertPlaceholderSelect, labelAtDepth, placeholderOptionAtDepth, placeholderSelectAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
     if (options == null) {
       options = {};
     }
     options = $.extend({
       'separator': ' > ',
       'placeholderOption': '',
+      'placeholderSelect': false,
       'class': false,
       'labels': false
     }, options);
@@ -41,6 +42,27 @@
         i++;
       }
       return array;
+    };
+    placeholderSelectAtDepth = function(depth, $select) {
+      var placeholder, text;
+      depth--;
+      placeholder = options.placeholderSelect;
+      if (placeholder) {
+        if (typeof placeholder === 'object') {
+          if (placeholder[depth]) {
+            text = placeholder[depth];
+          } else {
+            text = placeholder[placeholder.length - 1];
+          }
+        } else {
+          text = placeholder;
+        }
+        return $("<select disabled><option>" + text + "</option></select>").attr({
+          'data-dependent-depth': depth + 1,
+          'data-dependent-placeholder': true,
+          'data-dependent-id': $select.attr('data-dependent-id')
+        });
+      }
     };
     placeholderOptionAtDepth = function(depth) {
       var placeholder, text;
@@ -106,6 +128,16 @@
         }
       }
     };
+    insertPlaceholderSelect = function($select, $parent) {
+      var $placeholderSelect, depth, select_id;
+      if ($placeholderSelect = placeholderSelectAtDepth($select.attr('data-dependent-depth'), $select)) {
+        select_id = $select.attr('data-dependent-id');
+        depth = $select.attr('data-dependent-depth');
+        if (!($("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + depth + "']").length > 0)) {
+          return $select.before($placeholderSelect);
+        }
+      }
+    };
     clearAllSelectsByParent = function($parent) {
       return $(".dependent-sub[data-dependent-id='" + ($parent.attr('data-dependent-id')) + "']").each(function() {
         if (parseInt($(this).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))) {
@@ -130,6 +162,7 @@
         $newSelect.insertAfter($select);
       }
       insertLabel($newSelect, $select);
+      insertPlaceholderSelect($newSelect, $select);
       return hideSelect($newSelect);
     };
     selectChange = function($select) {
