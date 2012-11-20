@@ -126,6 +126,41 @@
                 
       </div>            
 
+      <div class="demo">
+        
+        <h3>Label Array</h3>
+        
+        <form>
+          <label>City: </label>
+          <select name="location" class="dependent-demo4">
+            <option></option>
+            <option value="238">London > North > Enfield</option>
+            <option value="239">London > North > Barnet</option>
+            <option value="240">London > South > Croydon</option>
+            <option value="241">London > South > Bromley</option>
+            <option value="242">London > South > Sutton</option>
+            <option value="243">Bristol > St Pauls</option>
+            <option value="244">Bristol > Horfield</option>
+            <option value="245">Bristol > Bedminster</option>
+            <option value="246">Bournemouth</option>
+          </select>
+          <input type="submit">
+        </form>
+        
+        <script src="https://gist.github.com/4088161.js?file=gistfile1.html"></script>
+
+        <script>
+          $(function(){
+            $('.dependent-demo4').dependentSelects({
+              labels: ['District: ', 'Region: ']
+            });        
+          })
+        </script>
+
+        <script src="https://gist.github.com/4088179.js?file=gistfile1.js"></script>
+                
+      </div>            
+
     </section>
 
   </body>
