@@ -7,13 +7,14 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, insertLabel, labelAtDepth, placeholderAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, insertLabel, insertPlaceholderSelect, labelAtDepth, placeholderOptionAtDepth, placeholderSelectAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
     if (options == null) {
       options = {};
     }
     options = $.extend({
       'separator': ' > ',
-      'placeholder': '',
+      'placeholderOption': '',
+      'placeholderSelect': false,
       'class': false,
       'labels': false
     }, options);
@@ -42,19 +43,41 @@
       }
       return array;
     };
-    placeholderAtDepth = function(depth) {
-      var placeholder;
+    placeholderSelectAtDepth = function(depth, $select) {
+      var placeholder, text;
       depth--;
-      placeholder = options.placeholder;
+      placeholder = options.placeholderSelect;
+      if (placeholder) {
+        if (typeof placeholder === 'object') {
+          if (placeholder[depth]) {
+            text = placeholder[depth];
+          } else {
+            text = placeholder[placeholder.length - 1];
+          }
+        } else {
+          text = placeholder;
+        }
+        return $("<select disabled><option>" + text + "</option></select>").attr({
+          'data-dependent-depth': depth + 1,
+          'data-dependent-placeholder': true,
+          'data-dependent-id': $select.attr('data-dependent-id')
+        });
+      }
+    };
+    placeholderOptionAtDepth = function(depth) {
+      var placeholder, text;
+      depth--;
+      placeholder = options.placeholderOption;
       if (typeof placeholder === 'object') {
         if (placeholder[depth]) {
-          return placeholder[depth];
+          text = placeholder[depth];
         } else {
-          return placeholder[placeholder.length - 1];
+          text = placeholder[placeholder.length - 1];
         }
       } else {
-        return placeholder;
+        text = placeholder;
       }
+      return $("<option>" + text + "</option>");
     };
     labelAtDepth = function(depth, $select) {
       var labels;
@@ -77,15 +100,17 @@
       var select_depth, select_id;
       select_id = $select.attr('data-dependent-id');
       select_depth = $select.attr('data-dependent-depth');
+      $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
       $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
       return $select.hide();
     };
     showSelect = function($select) {
       var select_depth, select_id;
-      $select.show();
       select_id = $select.attr('data-dependent-id');
       select_depth = $select.attr('data-dependent-depth');
-      return $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+      $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
+      $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+      return $select.show();
     };
     insertLabel = function($select, $parent) {
       var $label, label, select_depth, select_id;
@@ -105,6 +130,16 @@
         }
       }
     };
+    insertPlaceholderSelect = function($select, $parent) {
+      var $placeholderSelect, depth, select_id;
+      if ($placeholderSelect = placeholderSelectAtDepth($select.attr('data-dependent-depth'), $select)) {
+        select_id = $select.attr('data-dependent-id');
+        depth = $select.attr('data-dependent-depth');
+        if (!($("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + depth + "']").length > 0)) {
+          return $select.before($placeholderSelect);
+        }
+      }
+    };
     clearAllSelectsByParent = function($parent) {
       return $(".dependent-sub[data-dependent-id='" + ($parent.attr('data-dependent-id')) + "']").each(function() {
         if (parseInt($(this).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))) {
@@ -119,7 +154,7 @@
       if (($currentSelect = $("select[data-dependent-parent='" + name + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         return $currentSelect;
       }
-      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append("<option>" + (placeholderAtDepth(depth)) + "</option>");
+      $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append(placeholderOptionAtDepth(depth));
       if (options.labels === true) {
         $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'));
       }
@@ -129,6 +164,7 @@
         $newSelect.insertAfter($select);
       }
       insertLabel($newSelect, $select);
+      insertPlaceholderSelect($newSelect, $select);
       return hideSelect($newSelect);
     };
     selectChange = function($select) {
@@ -149,7 +185,7 @@
       var $selectedOption, val;
       $selectedOption = $select.find('option:selected');
       val = $selectedOption.val();
-      if (!(val === '' || val === options.placeholder)) {
+      if (!(val === '' || val === placeholderOptionAtDepth($select.attr('data-dependent-depth')).val())) {
         return $select.attr('data-dependent-selected-id', val);
       }
     };

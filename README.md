@@ -53,10 +53,11 @@ There's some options you can pass into jQuery Dependent Selects when called. The
 ```javascript
 $('.example-class').dependentSelects({
   separator: ' > ', // String: The separator used to define the nesting in the option field's text
-  placeholder: '', // String or array of strings: The text used for the sub select boxes' placeholder option.
+  placeholderOption: '', // String or array of strings: The text used for the sub select boxes' placeholder option.
                    // If an array, the first 'sub' level will be the first array item, you should manually create
                    // the top level's placeholder in the HTML.
-  class: false // String: Add an extra class to all sub selects
+  placeholderSelect: false, // Array of strings: The text used for placeholder select boxes for sub levels.
+  class: false, // String: Add an extra class to all sub selects
   labels: false // Array of strings: The text used for the sub select boxes' labels. Label element is
                 // inserted before sub select.
 });
