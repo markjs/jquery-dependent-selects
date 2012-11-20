@@ -1,5 +1,5 @@
 ###
-# jQuery Dependent Selects v1.0.4
+# jQuery Dependent Selects v1.1.0
 # Copyright 2012 Mark J Smith, Simpleweb
 # Details on http://github.com/simpleweb/jquery-dependent-selects
 ###
@@ -11,6 +11,7 @@
       'separator': ' > '
       'placeholder': ''
       'class': false
+      'labels': false
     }, options)
 
     createSelectId = ->
@@ -39,32 +40,78 @@
         if placeholder[depth]
           placeholder[depth]
         else
-          placeholder[placeholder.length]
+          placeholder[placeholder.length-1]
       else
         placeholder
+
+    labelAtDepth = (depth, $select) ->
+      depth--
+      labels = options.labels
+      if labels
+        if labels == true
+          labels = $select.data('dependent-labels')
+        if labels[depth]
+          labels[depth]
+        else
+          labels[labels.length-1]
+      else
+        false
+
+    hideSelect = ($select) ->
+      select_id = $select.attr('data-dependent-id')
+      select_depth = $select.attr('data-dependent-depth')
+      $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
+      $select.hide()
+
+    showSelect = ($select) ->
+      $select.show()
+      select_id = $select.attr('data-dependent-id')
+      select_depth = $select.attr('data-dependent-depth')
+      $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
+
+    insertLabel = ($select, $parent) ->
+      if label = labelAtDepth($select.attr('data-dependent-depth'), $select)
+        select_id = $select.attr('data-dependent-id')
+        select_depth = $select.attr('data-dependent-depth')
+        $label = $("<label>#{label}</label>").attr({
+          'data-dependent-id': select_id
+          'data-dependent-depth': select_depth
+        })
+        unless $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").length > 0
+          if $parent
+            $parent.after($label)
+          else
+            $select.before($label)
 
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->
         if parseInt($(@).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))
           $(@).find('option:first').attr('selected', 'selected')
-          $(@).hide()
+          hideSelect $(@)
 
-    createNewSelect = (options = {}) ->
-      name = options.name
-      $select = options.select
+    createNewSelect = (name, $select, depth) ->
       select_id = $select.attr('data-dependent-id')
 
       if ($currentSelect = $("select[data-dependent-parent='#{name}'][data-dependent-id='#{select_id}']")).length > 0
         return $currentSelect
 
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name)
-                   .attr('data-dependent-depth', options.depth)
+                   .attr('data-dependent-depth', depth)
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
                    .addClass(options.class)
-                   .append("<option>#{placeholderAtDepth(options.depth)}</option>")
-      $newSelect.insertAfter($select)
-      $newSelect.hide()
+                   .append("<option>#{placeholderAtDepth(depth)}</option>")
+
+      if options.labels == true
+        $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'))
+
+      if ($labels = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{depth}']")).length > 0
+        $newSelect.insertAfter($labels)
+      else
+        $newSelect.insertAfter($select)
+        
+      insertLabel($newSelect, $select)
+      hideSelect($newSelect)
 
     selectChange = ($select) ->
       $("select[data-dependent-id='#{$select.attr('data-dependent-id')}'][name]").removeAttr('name')
@@ -74,7 +121,7 @@
       clearAllSelectsByParent($select)
       
       if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
-        $sub.show()
+        showSelect $sub
         $sub.attr('name', $select.attr('data-dependent-input-name'))
       else
         $select.attr('name', $select.attr('data-dependent-input-name'))
@@ -86,7 +133,7 @@
         $select.attr('data-dependent-selected-id', val)
 
     findSelectParent = ($select) ->
-      $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
+      $selects = $("select[data-dependent-id='#{$select.attr('data-dependent-id')}']")
       $all_options = $selects.find('option')
 
       $selects.filter( ->
@@ -98,7 +145,7 @@
 
     selectPreSelected = ($select) ->
       if (selected_id = $select.attr('data-dependent-selected-id'))
-        $selects = $("[data-dependent-id='#{$select.attr('data-dependent-id')}']")
+        $selects = $("select[data-dependent-id='#{$select.attr('data-dependent-id')}']")
         $all_options = $selects.find('option')
 
         $selected_option = $all_options.filter("[value='#{selected_id}']")
@@ -114,7 +161,7 @@
             else
               $(@).removeAttr('selected')
 
-          $current_select.show()
+          showSelect $current_select
           current_option_text = $current_select.attr('data-dependent-parent')
           $current_select = findSelectParent($current_select)
 
@@ -130,7 +177,7 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect({ name: name[0], select: $select, depth: depth + 1, placeholder: options.placeholder, class: options.class })
+          $subSelect = createNewSelect(name[0], $select, depth + 1)
           # Copy option into sub select
           $newOption = $option.clone()
           $newOption.html(splitOptionName($newOption)[1..-1].join(options.separator).trim())
