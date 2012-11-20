@@ -38,6 +38,8 @@
       depth--
       placeholder = options.placeholderSelect
       if placeholder
+        if placeholder == true
+          placeholder = $select.data('dependent-select-placeholders')
         if typeof placeholder == 'object'
           if placeholder[depth]
             text = placeholder[depth]
@@ -132,6 +134,9 @@
 
       if options.labels == true
         $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'))
+
+      if options.placeholderSelect == true
+        $newSelect.attr('data-dependent-select-placeholders', $select.attr('data-dependent-select-placeholders'))
 
       if ($labels = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{depth}']")).length > 0
         $newSelect.insertAfter($labels)

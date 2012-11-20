@@ -48,6 +48,9 @@
       depth--;
       placeholder = options.placeholderSelect;
       if (placeholder) {
+        if (placeholder === true) {
+          placeholder = $select.data('dependent-select-placeholders');
+        }
         if (typeof placeholder === 'object') {
           if (placeholder[depth]) {
             text = placeholder[depth];
@@ -157,6 +160,9 @@
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name).attr('data-dependent-depth', depth).attr('data-dependent-input-name', $select.attr('data-dependent-input-name')).attr('data-dependent-id', select_id).addClass(options["class"]).append(placeholderOptionAtDepth(depth));
       if (options.labels === true) {
         $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'));
+      }
+      if (options.placeholderSelect === true) {
+        $newSelect.attr('data-dependent-select-placeholders', $select.attr('data-dependent-select-placeholders'));
       }
       if (($labels = $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + depth + "']")).length > 0) {
         $newSelect.insertAfter($labels);
