@@ -9,7 +9,7 @@
   $.fn.dependentSelects = (options = {}) ->
     options = $.extend({
       'separator': ' > '
-      'placeholder': ''
+      'placeholderOption': ''
       'class': false
       'labels': false
     }, options)
@@ -33,16 +33,17 @@
         i++
       array
 
-    placeholderAtDepth = (depth) ->
+    placeholderOptionAtDepth = (depth) ->
       depth--
-      placeholder = options.placeholder
+      placeholder = options.placeholderOption
       if typeof placeholder == 'object'
         if placeholder[depth]
-          placeholder[depth]
+          text = placeholder[depth]
         else
-          placeholder[placeholder.length-1]
+          text = placeholder[placeholder.length-1]
       else
-        placeholder
+        text = placeholder
+      $("<option>#{text}</option>")
 
     labelAtDepth = (depth, $select) ->
       depth--
@@ -100,7 +101,7 @@
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
                    .addClass(options.class)
-                   .append("<option>#{placeholderAtDepth(depth)}</option>")
+                   .append(placeholderOptionAtDepth(depth))
 
       if options.labels == true
         $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'))
@@ -129,7 +130,7 @@
     selectedOption = ($select) ->
       $selectedOption = $select.find('option:selected')
       val = $selectedOption.val()
-      unless val == '' or val == options.placeholder
+      unless val == '' or val == placeholderOptionAtDepth($select.attr('data-dependent-depth')).val()
         $select.attr('data-dependent-selected-id', val)
 
     findSelectParent = ($select) ->
