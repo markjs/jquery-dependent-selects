@@ -100,19 +100,26 @@
       }
     };
     hideSelect = function($select) {
-      var select_depth, select_id;
+      var label, placeholder_select, select_depth, select_id;
       select_id = $select.attr('data-dependent-id');
       select_depth = $select.attr('data-dependent-depth');
-      $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
-      $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
+      placeholder_select = $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']");
+      label = $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
+      if (placeholder_select.length > 0) {
+        placeholder_select.show();
+        label.show();
+      }
       return $select.hide();
     };
     showSelect = function($select) {
-      var select_depth, select_id;
+      var label, placeholder_select, select_depth, select_id;
       select_id = $select.attr('data-dependent-id');
       select_depth = $select.attr('data-dependent-depth');
-      $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
-      $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+      placeholder_select = $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']");
+      label = $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+      if (placeholder_select.length > 0) {
+        placeholder_select.hide();
+      }
       return $select.show();
     };
     insertLabel = function($select, $parent) {
