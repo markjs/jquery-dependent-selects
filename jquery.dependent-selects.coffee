@@ -79,14 +79,16 @@
     hideSelect = ($select) ->
       select_id = $select.attr('data-dependent-id')
       select_depth = $select.attr('data-dependent-depth')
+      $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
       $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
       $select.hide()
 
     showSelect = ($select) ->
-      $select.show()
       select_id = $select.attr('data-dependent-id')
       select_depth = $select.attr('data-dependent-depth')
+      $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
       $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
+      $select.show()
 
     insertLabel = ($select, $parent) ->
       if label = labelAtDepth($select.attr('data-dependent-depth'), $select)

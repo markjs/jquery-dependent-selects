@@ -100,15 +100,17 @@
       var select_depth, select_id;
       select_id = $select.attr('data-dependent-id');
       select_depth = $select.attr('data-dependent-depth');
+      $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
       $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
       return $select.hide();
     };
     showSelect = function($select) {
       var select_depth, select_id;
-      $select.show();
       select_id = $select.attr('data-dependent-id');
       select_depth = $select.attr('data-dependent-depth');
-      return $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+      $("select[data-dependent-placeholder][data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").hide();
+      $("label[data-dependent-id='" + select_id + "'][data-dependent-depth='" + select_depth + "']").show();
+      return $select.show();
     };
     insertLabel = function($select, $parent) {
       var $label, label, select_depth, select_id;
