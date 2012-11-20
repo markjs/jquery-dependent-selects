@@ -1,5 +1,9 @@
 # jQuery Dependent Selects Change Log
 
+## Version 1.2.1
+
+- Fixes a display bug with placeholder selects and labels not displaying at the correct times
+
 ## Version 1.2.0
 
 - Allow placeholder selects for sub levels through a passed array of strings
