@@ -1,5 +1,5 @@
 ###
-# jQuery Dependent Selects v1.2.0
+# jQuery Dependent Selects v1.2.1
 # Copyright 2012 Mark J Smith, Simpleweb
 # Details on http://github.com/simpleweb/jquery-dependent-selects
 ###
@@ -81,15 +81,22 @@
     hideSelect = ($select) ->
       select_id = $select.attr('data-dependent-id')
       select_depth = $select.attr('data-dependent-depth')
-      $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
-      $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
+      placeholder_select = $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']")
+      label = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
+      if placeholder_select.length > 0
+        placeholder_select.show()
+        label.show()
+
       $select.hide()
 
     showSelect = ($select) ->
       select_id = $select.attr('data-dependent-id')
       select_depth = $select.attr('data-dependent-depth')
-      $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
-      $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
+      placeholder_select = $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']")
+      label = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
+      if placeholder_select.length > 0
+        placeholder_select.hide()
+
       $select.show()
 
     insertLabel = ($select, $parent) ->
