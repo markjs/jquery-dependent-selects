@@ -83,7 +83,7 @@
           $(function(){
             $('.dependent-demo2').dependentSelects({
               separator: ' || ',
-              placeholder: '-- Please Select --'
+              placeholderOption: '-- Please Select --'
             });        
           })
         </script>
@@ -128,7 +128,7 @@
 
       <div class="demo">
         
-        <h3>Label Array</h3>
+        <h3>Label Array &amp; Placeholder Selects</h3>
         
         <form>
           <label>City: </label>
@@ -152,7 +152,9 @@
         <script>
           $(function(){
             $('.dependent-demo4').dependentSelects({
-              labels: ['District: ', 'Region: ']
+              labels: ['District: ', 'Region: '],
+              placeholderOptions: ['Select a district', 'Select a region'],
+              placeholderSelect: ['Please select a city', 'Please select a district']
             });        
           })
         </script>
