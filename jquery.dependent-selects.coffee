@@ -1,5 +1,5 @@
 ###
-# jQuery Dependent Selects v1.1.0
+# jQuery Dependent Selects v1.2.0
 # Copyright 2012 Mark J Smith, Simpleweb
 # Details on http://github.com/simpleweb/jquery-dependent-selects
 ###
@@ -9,7 +9,8 @@
   $.fn.dependentSelects = (options = {}) ->
     options = $.extend({
       'separator': ' > '
-      'placeholder': ''
+      'placeholderOption': ''
+      'placeholderSelect': false
       'class': false
       'labels': false
     }, options)
@@ -33,16 +34,36 @@
         i++
       array
 
-    placeholderAtDepth = (depth) ->
+    placeholderSelectAtDepth = (depth, $select) ->
       depth--
-      placeholder = options.placeholder
+      placeholder = options.placeholderSelect
+      if placeholder
+        if placeholder == true
+          placeholder = $select.data('dependent-select-placeholders')
+        if typeof placeholder == 'object'
+          if placeholder[depth]
+            text = placeholder[depth]
+          else
+            text = placeholder[placeholder.length-1]
+        else
+          text = placeholder
+        $("<select disabled><option>#{text}</option></select>").attr({
+          'data-dependent-depth': depth+1
+          'data-dependent-placeholder': true
+          'data-dependent-id': $select.attr('data-dependent-id')
+        })
+
+    placeholderOptionAtDepth = (depth) ->
+      depth--
+      placeholder = options.placeholderOption
       if typeof placeholder == 'object'
         if placeholder[depth]
-          placeholder[depth]
+          text = placeholder[depth]
         else
-          placeholder[placeholder.length-1]
+          text = placeholder[placeholder.length-1]
       else
-        placeholder
+        text = placeholder
+      $("<option>#{text}</option>")
 
     labelAtDepth = (depth, $select) ->
       depth--
@@ -60,14 +81,16 @@
     hideSelect = ($select) ->
       select_id = $select.attr('data-dependent-id')
       select_depth = $select.attr('data-dependent-depth')
+      $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
       $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
       $select.hide()
 
     showSelect = ($select) ->
-      $select.show()
       select_id = $select.attr('data-dependent-id')
       select_depth = $select.attr('data-dependent-depth')
+      $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").hide()
       $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{select_depth}']").show()
+      $select.show()
 
     insertLabel = ($select, $parent) ->
       if label = labelAtDepth($select.attr('data-dependent-depth'), $select)
@@ -82,6 +105,13 @@
             $parent.after($label)
           else
             $select.before($label)
+
+    insertPlaceholderSelect = ($select, $parent) ->
+      if $placeholderSelect = placeholderSelectAtDepth($select.attr('data-dependent-depth'), $select)
+        select_id = $select.attr('data-dependent-id')
+        depth = $select.attr('data-dependent-depth')
+        unless $("select[data-dependent-placeholder][data-dependent-id='#{select_id}'][data-dependent-depth='#{depth}']").length > 0
+          $select.before($placeholderSelect)
 
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->
@@ -100,10 +130,13 @@
                    .attr('data-dependent-input-name', $select.attr('data-dependent-input-name'))
                    .attr('data-dependent-id', select_id)
                    .addClass(options.class)
-                   .append("<option>#{placeholderAtDepth(depth)}</option>")
+                   .append(placeholderOptionAtDepth(depth))
 
       if options.labels == true
         $newSelect.attr('data-dependent-labels', $select.attr('data-dependent-labels'))
+
+      if options.placeholderSelect == true
+        $newSelect.attr('data-dependent-select-placeholders', $select.attr('data-dependent-select-placeholders'))
 
       if ($labels = $("label[data-dependent-id='#{select_id}'][data-dependent-depth='#{depth}']")).length > 0
         $newSelect.insertAfter($labels)
@@ -111,6 +144,7 @@
         $newSelect.insertAfter($select)
         
       insertLabel($newSelect, $select)
+      insertPlaceholderSelect($newSelect, $select)
       hideSelect($newSelect)
 
     selectChange = ($select) ->
@@ -129,7 +163,7 @@
     selectedOption = ($select) ->
       $selectedOption = $select.find('option:selected')
       val = $selectedOption.val()
-      unless val == '' or val == options.placeholder
+      unless val == '' or val == placeholderOptionAtDepth($select.attr('data-dependent-depth')).val()
         $select.attr('data-dependent-selected-id', val)
 
     findSelectParent = ($select) ->

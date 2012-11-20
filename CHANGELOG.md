@@ -1,5 +1,10 @@
 # jQuery Dependent Selects Change Log
 
+## Version 1.2.0
+
+- Allow placeholder selects for sub levels through a passed array of strings
+- Allow placeholder selects to be set through a data attribute on the select
+
 ## Version 1.1.0
 
 - Allow labels to be created for sub selects through a passed array of strings
