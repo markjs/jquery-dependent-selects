@@ -25,7 +25,7 @@
         int
 
     splitOptionName = ($option) ->
-      array = $option.text().split(options.separator).map((valuePart) -> valuePart.trim())
+      array = $.map($option.text().split(options.separator), (valuePart) -> $.trim(valuePart))
       i = 0
       for item in array
         if item == ''
@@ -221,7 +221,7 @@
           $subSelect = createNewSelect(name[0], $select, depth + 1)
           # Copy option into sub select
           $newOption = $option.clone()
-          $newOption.html(splitOptionName($newOption)[1..-1].join(options.separator).trim())
+          $newOption.html($.trim(splitOptionName($newOption)[1..-1].join(options.separator)))
           $subSelect.append($newOption)
 
           # Change option to just parent location
