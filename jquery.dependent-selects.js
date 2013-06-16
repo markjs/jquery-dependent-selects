@@ -7,7 +7,7 @@
 
 (function($) {
   return $.fn.dependentSelects = function(options) {
-    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, insertLabel, insertPlaceholderSelect, labelAtDepth, placeholderOptionAtDepth, placeholderSelectAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
+    var clearAllSelectsByParent, createNewSelect, createSelectId, findSelectParent, hideSelect, htmlEncode, insertLabel, insertPlaceholderSelect, labelAtDepth, placeholderOptionAtDepth, placeholderSelectAtDepth, prepareSelect, selectChange, selectPreSelected, selectedOption, showSelect, splitOptionName;
     if (options == null) {
       options = {};
     }
@@ -249,7 +249,7 @@
         name = splitOptionName($option);
         val = $option.val();
         if (name.length > 1) {
-          $subSelect = createNewSelect(name[0], $select, depth + 1);
+          $subSelect = createNewSelect(htmlEncode(name[0]), $select, depth + 1);
           $newOption = $option.clone();
           $newOption.html($.trim(splitOptionName($newOption).slice(1).join(options.separator)));
           $subSelect.append($newOption);
@@ -265,6 +265,9 @@
       return $select.off('change').on('change', function() {
         return selectChange($select);
       });
+    };
+    htmlEncode = function(value) {
+      return $('<div/>').text(value).html();
     };
     return this.each(function() {
       var $select;
