@@ -24,6 +24,13 @@
       else
         int
 
+    createSelectSId = ->
+      int = parseInt(Math.random()*1000)
+      if $("[data-dependent-idid='#{int}']").length > 0
+        createSelectSId()
+      else
+        int
+
     splitOptionName = ($option) ->
       array = $.map($option.text().split(options.separator), (valuePart) -> $.trim(valuePart))
       i = 0
@@ -156,7 +163,7 @@
 
     selectChange = ($select) ->
       $("select[data-dependent-id='#{$select.attr('data-dependent-id')}'][name]").removeAttr('name')
-      valName = $select.find(':selected').html()
+      valName = $select.find(':selected').attr('data-dependent-idid')
       val = $select.val()
       select_id = $select.attr('data-dependent-id')
       clearAllSelectsByParent($select)
@@ -218,10 +225,12 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect(name[0], $select, depth + 1)
+          $newId = createSelectSId()
+          $subSelect = createNewSelect($newId, $select, depth + 1)
           # Copy option into sub select
           $newOption = $option.clone()
           $newOption.html($.trim(splitOptionName($newOption)[1..-1].join(options.separator)))
+          $newOption.attr('data-dependent-idid',$newId)
           $subSelect.append($newOption)
 
           # Change option to just parent location
