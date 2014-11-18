@@ -2,11 +2,11 @@
 
 ## Overview
 
-A jQuery plugin to allow multi-level select boxes that degrade gracefully. It only changes the markup (and very slightly at that) so the styling is all down to you.
+A jQuery plugin to allow multi-level select boxes that degrade gracefully. It only changes the markup so the styling is all down to you.
 
 ## Demo
 
-You can check out some demos [over here](http://simpleweb.github.com/jquery-dependent-selects)!
+You can check out some demos [over here](http://kaibakker.github.com/jquery-dependent-selects)!
 
 ## Usage
 
