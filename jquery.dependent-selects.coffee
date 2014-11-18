@@ -128,8 +128,9 @@
 
     createNewSelect = (name, $select, depth) ->
       select_id = $select.attr('data-dependent-id')
+      path = $select.attr('data-dependent-path') + options.separator + name
 
-      if ($currentSelect = $("select[data-dependent-parent='#{name}'][data-dependent-id='#{select_id}']")).length > 0
+      if ($currentSelect = $("select[data-dependent-path='#{path}'][data-dependent-id='#{select_id}']")).length > 0
         return $currentSelect
 
       $newSelect = $('<select class="dependent-sub"/>').attr('data-dependent-parent', name)
@@ -149,7 +150,7 @@
         $newSelect.insertAfter($labels)
       else
         $newSelect.insertAfter($select)
-        
+
       insertLabel($newSelect, $select)
       insertPlaceholderSelect($newSelect, $select)
       hideSelect($newSelect)
@@ -160,8 +161,8 @@
       val = $select.val()
       select_id = $select.attr('data-dependent-id')
       clearAllSelectsByParent($select)
-      
-      if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
+      path = $select.attr('data-dependent-path') + options.separator + valName
+      if ($sub = $(".dependent-sub[data-dependent-path='#{path}'][data-dependent-id='#{select_id}']")).length > 0
         showSelect $sub
         $sub.attr('name', $select.attr('data-dependent-input-name'))
       else
@@ -180,7 +181,7 @@
       $selects.filter( ->
         vals = []
         $(@).find('option').each ->
-          vals.push $(@).html() == $select.attr('data-dependent-parent')
+          vals.push $(@).attr('data-dependent-path') == $select.attr('data-dependent-path')
         $.inArray(true, vals) > -1
       )
 
@@ -213,21 +214,23 @@
       $options = $select.children('option')
       $options.each ->
         $option = $(@)
-        
+
         name = splitOptionName($option)
         val = $option.val()
         if name.length > 1
           # Create sub select
           $subSelect = createNewSelect(name[0], $select, depth + 1)
+          $subSelect.attr('data-dependent-path', $select.attr('data-dependent-path') + options.separator + name[0])
           # Copy option into sub select
           $newOption = $option.clone()
           $newOption.html($.trim(splitOptionName($newOption)[1..-1].join(options.separator)))
           $subSelect.append($newOption)
 
           # Change option to just parent location
-          $option.val('').html(name[0]).attr('data-dependent-name', name[0])
+          path = $select.attr('data-dependent-path') + options.separator + name[0]
+          $option.val('').html(name[0]).attr('data-dependent-path', path)
           # Remove option if already one for that parent location
-          $option.remove() if $options.parent().find("[data-dependent-name='#{name[0]}']").length > 1
+          $option.remove() if $options.parent().find("[data-dependent-path='#{path}']").length > 1
 
           prepareSelect($subSelect, depth + 1, select_id)
 
@@ -243,6 +246,7 @@
       $select = $(@)
       $select.attr('data-dependent-input-name', $select.attr('name'))
       selectedOption($select)
+      $select.attr('data-dependent-path', "x")
       prepareSelect $select, 0, createSelectId()
       selectPreSelected($select)
 
