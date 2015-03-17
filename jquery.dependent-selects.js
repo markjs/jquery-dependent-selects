@@ -187,7 +187,7 @@
       val = $select.val();
       select_id = $select.attr('data-dependent-id');
       clearAllSelectsByParent($select);
-      if (($sub = $(".dependent-sub[data-dependent-parent='" + valName + "'][data-dependent-id='" + select_id + "']")).length > 0) {
+      if (($sub = $(".dependent-sub[data-dependent-parent='" + (valName.replace("'", "\\'")) + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         showSelect($sub);
         return $sub.attr('name', $select.attr('data-dependent-input-name'));
       } else {
