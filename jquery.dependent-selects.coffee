@@ -161,7 +161,7 @@
       select_id = $select.attr('data-dependent-id')
       clearAllSelectsByParent($select)
       
-      if ($sub = $(".dependent-sub[data-dependent-parent='#{valName}'][data-dependent-id='#{select_id}']")).length > 0
+      if ($sub = $(".dependent-sub[data-dependent-parent='#{valName.replace("'", "\\'")}'][data-dependent-id='#{select_id}']")).length > 0
         showSelect $sub
         $sub.attr('name', $select.attr('data-dependent-input-name'))
       else
@@ -218,7 +218,7 @@
         val = $option.val()
         if name.length > 1
           # Create sub select
-          $subSelect = createNewSelect(name[0], $select, depth + 1)
+          $subSelect = createNewSelect(htmlEncode(name[0]), $select, depth + 1)
           # Copy option into sub select
           $newOption = $option.clone()
           $newOption.html($.trim(splitOptionName($newOption)[1..-1].join(options.separator)))
@@ -237,6 +237,9 @@
 
       $select.off('change').on 'change', ->
         selectChange($select)
+
+    htmlEncode = (value) ->
+      $('<div/>').text(value).html();
 
     # Loop through each of the selects the plugin is called on, and set them up!
     @each ->
