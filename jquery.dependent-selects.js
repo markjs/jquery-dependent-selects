@@ -225,11 +225,10 @@
         $current_select = $selected_select;
         current_option_text = $selected_option.html();
         for (i = _i = _ref = parseInt($selected_select.attr('data-dependent-depth')); _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+          $(this).removeAttr('selected');
           $current_select.find('option').each(function() {
             if ($(this).html() === current_option_text) {
               return $(this).attr('selected', 'selected');
-            } else {
-              return $(this).removeAttr('selected');
             }
           });
           showSelect($current_select);

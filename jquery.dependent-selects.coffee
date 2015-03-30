@@ -196,11 +196,10 @@
         current_option_text = $selected_option.html()
 
         for i in [(parseInt $selected_select.attr('data-dependent-depth'))..0]
+          $(@).removeAttr('selected')
           $current_select.find('option').each ->
             if $(@).html() == current_option_text
               $(@).attr('selected', 'selected')
-            else
-              $(@).removeAttr('selected')
 
           showSelect $current_select
           current_option_text = $current_select.attr('data-dependent-parent')
