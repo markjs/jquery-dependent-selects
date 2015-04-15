@@ -6,7 +6,7 @@ A jQuery plugin to allow multi-level select boxes that degrade gracefully. It on
 
 ## Demo
 
-You can check out some demos [over here](http://kaibakker.github.com/jquery-dependent-selects)!
+You can check out some demos [over here](http://markjs.github.io/jquery-dependent-selects/)!
 
 ## Usage
 
