@@ -216,7 +216,7 @@
               $(@).removeAttr('selected')
 
           showSelect $current_select
-          current_option_text = splitName($current_select.attr('data-dependent-path')).last()
+          current_option_text = splitName($current_select.attr('data-dependent-path')).slice(-1)[0];
           $current_select = findSelectParent($current_select)
 
         $selected_select.trigger('change')
