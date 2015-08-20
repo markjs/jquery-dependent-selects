@@ -80,6 +80,8 @@
         } else {
           text = placeholder[placeholder.length - 1];
         }
+      } else if (placeholder == false) {
+    	  return $('');
       } else {
         text = placeholder;
       }
@@ -194,10 +196,12 @@
       path = pathForOption($select, valName).replace("'", "\\'");
       if (($sub = $(".dependent-sub[data-dependent-path='" + path + "'][data-dependent-id='" + select_id + "']")).length > 0) {
         showSelect($sub);
-        return $sub.attr('name', $select.attr('data-dependent-input-name'));
+        $sub.attr('name', $select.attr('data-dependent-input-name'));
       } else {
-        return $select.attr('name', $select.attr('data-dependent-input-name'));
+        $select.attr('name', $select.attr('data-dependent-input-name'));
       }
+      if (typeof options.changed == 'function' && options.initialized)
+    	  options.changed();
     };
     selectedOption = function($select) {
       var $selectedOption, val;
@@ -245,7 +249,11 @@
             }
           });
           showSelect($current_select);
-          current_option_text = splitName($current_select.attr('data-dependent-path')).last();
+          if ($current_select.attr('data-dependent-path') == undefined)
+        	  break;
+          var sn = splitName($current_select.attr('data-dependent-path'));
+          current_option_text = sn[sn.length-1];
+          
           $current_select = findSelectParent($current_select);
         }
         return $selected_select.trigger('change');
@@ -289,7 +297,8 @@
       $select.attr('data-dependent-input-name', $select.attr('name'));
       selectedOption($select);
       prepareSelect($select, 0, createSelectId());
-      return selectPreSelected($select);
+      selectPreSelected($select);
+      options.initialized = true;
     });
   };
 })(jQuery);
