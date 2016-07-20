@@ -74,4 +74,4 @@ The plugin is written in CoffeeScript and a Cakefile is included with `build` an
 
 ## License
 
-Licenced under MIT. Copyright 2012 Mark J Smith, Simpleweb.
+Licenced under MIT. Copyright Mark J Smith, Simpleweb.
