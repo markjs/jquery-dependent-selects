@@ -56,6 +56,7 @@ $('.example-class').dependentSelects({
   placeholderOption: '', // String or array of strings: The text used for the sub select boxes' placeholder option.
                    // If an array, the first 'sub' level will be the first array item, you should manually create
                    // the top level's placeholder in the HTML.
+  placeholderValue: '',  // String or array of strings: The value used for the sub select boxes' placeholder option.
   placeholderSelect: false, // Array of strings: The text used for placeholder select boxes for sub levels.
   class: false, // String: Add an extra class to all sub selects
   labels: false // Array of strings: The text used for the sub select boxes' labels. Label element is

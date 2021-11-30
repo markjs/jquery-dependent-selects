@@ -1,5 +1,12 @@
 # jQuery Dependent Selects Change Log
 
+## Version 1.2.2
+
+- Allow placeholder value for sub selects through a passed array of strings
+- Fixes a display bug when form displays a hirer hierarchy choice (attr  -> prop)
+- Fixes that undefined caused an exception to exit when initially displaying the selection value
+
+
 ## Version 1.2.1
 
 - Fixes a display bug with placeholder selects and labels not displaying at the correct times

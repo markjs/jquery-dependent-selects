@@ -1,6 +1,7 @@
 ###
-# jQuery Dependent Selects v1.2.2
+# jQuery Dependent Selects v1.2.3
 # Copyright 2012 Mark J Smith, Simpleweb
+# Licenced under MIT
 # Details on http://github.com/simpleweb/jquery-dependent-selects
 ###
 
@@ -10,6 +11,7 @@
     options = $.extend({
       'separator': ' > '
       'placeholderOption': ''
+      'placeholderValue': ''
       'placeholderSelect': false
       'class': false
       'labels': false
@@ -68,7 +70,19 @@
           text = placeholder[placeholder.length-1]
       else
         text = placeholder
-      $("<option>#{text}</option>")
+
+      def_val = options.placeholderValue
+      if typeof def_val == 'object'
+        if def_val[depth]
+          val = def_val[depth]
+        else
+          val = def_val[def_val.length-1]
+      else
+        val = def_val
+      if val != null && val != ''
+        val = ' value="' + val + '"';
+      
+      $("<option#{val}>#{text}</option>")
 
     labelAtDepth = (depth, $select) ->
       depth--
@@ -128,7 +142,7 @@
     clearAllSelectsByParent = ($parent) ->
       $(".dependent-sub[data-dependent-id='#{$parent.attr('data-dependent-id')}']").each ->
         if parseInt($(@).attr('data-dependent-depth')) > parseInt($parent.attr('data-dependent-depth'))
-          $(@).find('option:first').attr('selected', 'selected')
+          $(@).find('option:first').prop('selected', true)
           hideSelect $(@)
 
     createNewSelect = (name, $select, depth) ->
@@ -211,13 +225,14 @@
         for i in [(parseInt $selected_select.attr('data-dependent-depth'))..0]
           $current_select.find('option').each ->
             if $(@).html() == current_option_text
-              $(@).attr('selected', 'selected')
+              $(@).prop('selected', true)
             else
-              $(@).removeAttr('selected')
-
+              $(@).prop('selected', false)
+          
           showSelect $current_select
-          current_option_text = splitName($current_select.attr('data-dependent-path')).slice(-1)[0];
-          $current_select = findSelectParent($current_select)
+          if typeof($current_select.attr('data-dependent-path')) != "undefined"
+            current_option_text = splitName($current_select.attr('data-dependent-path')).slice(-1)[0];
+            $current_select = findSelectParent($current_select)
 
         $selected_select.trigger('change')
 
